@@ -57,7 +57,13 @@ INSTALLED_APPS = [
 
     # Own Apps
     'ivh_inventário.core.apps.CoreConfig',
+    'ivh_inventário.estoque',
+    'ivh_inventário.item',
+    'ivh_inventário.saida',
+    'ivh_inventário.usuario'
 ]
+
+AUTH_USER_MODEL = 'usuario.Usuario'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
