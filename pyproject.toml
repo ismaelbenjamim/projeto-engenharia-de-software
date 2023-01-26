@@ -25,7 +25,7 @@ flake8 = "^3.9.1"
 pytest-cov = "^2.11.1"
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "ivh_inventário.settings"
+DJANGO_SETTINGS_MODULE = "ivh_inventario.settings"
 python_files = [
     "test*.py",
      "*tests.py",

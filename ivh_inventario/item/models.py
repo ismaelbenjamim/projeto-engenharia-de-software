@@ -24,7 +24,3 @@ class Item(models.Model):
     fornecedor = models.CharField(max_length=200, null=True, blank=True)
     descricao = models.TextField()
     tipo_unit = models.CharField(max_length=10, null=True, blank=True)
-
-
-
-

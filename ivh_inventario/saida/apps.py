@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class UsuarioConfig(AppConfig):
+class SaidaConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'ivh_inventário.usuario'
+    name = 'ivh_inventario.saida'

@@ -1,6 +1,6 @@
 from drf_yasg.generators import OpenAPISchemaGenerator
 
-from ivh_inventário import settings
+from ivh_inventario import settings
 
 
 class HttpsSchemaGenerator(OpenAPISchemaGenerator):
