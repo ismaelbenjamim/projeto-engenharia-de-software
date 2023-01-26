@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from ivh_inventario.saida.models import Saida
+
+admin.site.register(Saida)
