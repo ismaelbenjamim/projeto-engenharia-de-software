@@ -8,6 +8,7 @@ from ivh_inventario.entrada.api.viewsets import CRUDEntradaViewSet
 from ivh_inventario.estoque.api.viewsets import CRUDEstoqueViewSet
 from ivh_inventario.openapi_config import HttpsSchemaGenerator
 from ivh_inventario.saida.api.viewsets import CRUDSaidaViewSet
+from ivh_inventario.usuario.api.viewsets import UsuarioLoginViewSet, CRUDUsuarioViewSet, UsuarioCadastroViewSet
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -26,11 +27,24 @@ schema_view = get_schema_view(
 router = routers.DefaultRouter()
 
 router.register('entradas/entrada', CRUDEntradaViewSet, basename='CRUD de entrada')
+
 router.register('saidas/saida', CRUDSaidaViewSet, basename='CRUD de saida')
+
 router.register('estoques/estoque', CRUDEstoqueViewSet, basename='CRUD de estoque')
+
+router.register('usuarios/usuario', CRUDUsuarioViewSet, basename='CRUD de usuário')
+router.register('usuarios/cadastro', UsuarioCadastroViewSet, basename='cadastro do usuário')
+
+
+
+APIs = [
+    path('login/', UsuarioLoginViewSet.as_view()),
+
+]
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('api/', include(APIs)),
     path('admin/', admin.site.urls),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
