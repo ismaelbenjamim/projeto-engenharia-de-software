@@ -1,13 +1,15 @@
 from django.contrib.auth.hashers import make_password
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from ivh_inventario.usuario.api.serializers import UsuarioLoginSerializer, UsuarioCadastroSerializer, \
-    CRUDUsuarioSerializer
+    CRUDUsuarioSerializer, TrocarSenhaSerializer
 from ivh_inventario.usuario.models import Usuario
 
 
@@ -85,6 +87,31 @@ class UsuarioCadastroViewSet(viewsets.ModelViewSet):
 
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
+
+class TrocarSenhaViewSet(APIView):
+    http_method_names = ['post']
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=TrocarSenhaSerializer)
+    def post(self, request):
+        serializer = TrocarSenhaSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        usuario = self.request.user
+        validar_senha = usuario.check_password(serializer.data['senha_antiga'])
+
+        if validar_senha:
+            usuario.set_password(serializer.data['senha_nova'])
+            usuario.save()
+
+            return Response({'mensagem': "Senha alterada com sucesso!"}, status=status.HTTP_200_OK)
+        else:
+            return Response({'mensagem': "A senha antiga está incorreta!"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 

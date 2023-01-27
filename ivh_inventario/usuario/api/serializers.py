@@ -50,3 +50,10 @@ class CRUDUsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = '__all__'
+
+
+
+
+class TrocarSenhaSerializer(serializers.Serializer):
+    senha_nova = serializers.CharField(required=True)
+    senha_antiga = serializers.CharField(required=True)

@@ -11,4 +11,4 @@ class Entrada(models.Model):
     dt_entrada = models.DateField("Data de entrada")
     quantidade = models.IntegerField("Quantidade", default=1)
     usuario = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True, blank=True)
