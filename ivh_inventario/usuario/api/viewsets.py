@@ -1,4 +1,5 @@
 from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
@@ -8,8 +9,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from ivh_inventario.core.utils.email import enviar_email_template
+from ivh_inventario.core.utils.gerador_codigo import geracao_codigo
 from ivh_inventario.usuario.api.serializers import UsuarioLoginSerializer, UsuarioCadastroSerializer, \
-    CRUDUsuarioSerializer, TrocarSenhaSerializer
+    CRUDUsuarioSerializer, TrocarSenhaSerializer, EsqueceuSenhaSerializer, RedefinicaoSenhaSerializer
 from ivh_inventario.usuario.models import Usuario
 
 
@@ -33,18 +36,16 @@ class UsuarioLoginViewSet(ObtainAuthToken):
         token, created = Token.objects.get_or_create(user=self.usuario)
         return token
 
+    @swagger_auto_schema(**docs['post'])
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         self.usuario = serializer.validated_data['user']
-        print(self.usuario.username)
         response = {
             'uuid': self.usuario.pk,
             'username': self.usuario.username,
             'token': self.get_token().key,
-
         }
-
         return Response(response)
 
 
@@ -89,7 +90,6 @@ class UsuarioCadastroViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
-
 class TrocarSenhaViewSet(APIView):
     http_method_names = ['post']
     authentication_classes = [TokenAuthentication]
@@ -112,8 +112,65 @@ class TrocarSenhaViewSet(APIView):
             return Response({'mensagem': "A senha antiga está incorreta!"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class EsqueceuSenhaViewSet(APIView):
+    http_method_names = ['post']
+
+    docs = {
+        "post": {
+            "operation_summary": "Esqueceu a senha",
+            "operation_description": "Esquecimento de senha de usuário",
+            "request_body": EsqueceuSenhaSerializer,
+            "responses": {
+                "200": EsqueceuSenhaSerializer.Response()
+            }
+        }
+    }
+
+    @swagger_auto_schema(**docs['post'])
+    def post(self, request):
+        serializer = EsqueceuSenhaSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        usuario = serializer.validated_data['username']
+        if usuario:
+            enviar_email_template(
+                usuario=usuario,
+                titulo="[IVH Inventario] Redefinição de senha",
+                html="esqueci_senha",
+                dados={
+                    "usuario": usuario,
+                    "codigo": usuario.cod_redefinicao
+                }
+            )
+            return Response({'mensagem': "E-mail de redefinição de senha enviado"}, status=status.HTTP_200_OK)
+        else:
+            Response({'mensagem': "Usuário com este e-mail não encontrado"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class RedefinirSenhaViewSet(APIView):
+    http_method_names = ['post']
 
+    docs = {
+        "post": {
+            "operation_summary": "Redefinir a senha",
+            "operation_description": "Redefinição de senha de usuário",
+            "request_body": RedefinicaoSenhaSerializer,
+            "responses": {
+                "200": EsqueceuSenhaSerializer.Response()
+            }
+        }
+    }
 
+    @swagger_auto_schema(**docs['post'])
+    def post(self, request):
+        serializer = RedefinicaoSenhaSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        usuario = serializer.validated_data['username']
+        if serializer.data['codigo'] == usuario.cod_redefinicao:
+            usuario.set_password(serializer.data['senha_nova'])
+            usuario.cod_redefinicao = geracao_codigo()
+            usuario.save()
+            return Response({'mensagem': "Senha alterada com sucesso!"}, status=status.HTTP_200_OK)
+        else:
+            return Response({'mensagem': "O código de redefinição está incorreta!"}, status=status.HTTP_400_BAD_REQUEST)
 

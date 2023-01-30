@@ -9,7 +9,7 @@ from ivh_inventario.estoque.api.viewsets import CRUDEstoqueViewSet
 from ivh_inventario.openapi_config import HttpsSchemaGenerator
 from ivh_inventario.saida.api.viewsets import CRUDSaidaViewSet
 from ivh_inventario.usuario.api.viewsets import UsuarioLoginViewSet, CRUDUsuarioViewSet, UsuarioCadastroViewSet, \
-    TrocarSenhaViewSet
+    TrocarSenhaViewSet, EsqueceuSenhaViewSet, RedefinirSenhaViewSet
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -36,12 +36,11 @@ router.register('estoques/estoque', CRUDEstoqueViewSet, basename='CRUD de estoqu
 router.register('usuarios/usuario', CRUDUsuarioViewSet, basename='CRUD de usuário')
 router.register('usuarios/cadastro', UsuarioCadastroViewSet, basename='cadastro do usuário')
 
-
-
 APIs = [
     path('login/', UsuarioLoginViewSet.as_view()),
     path('usuarios/trocar-senha/', TrocarSenhaViewSet.as_view()),
-
+    path('usuarios/esqueci-senha/', EsqueceuSenhaViewSet.as_view()),
+    path('usuarios/redefinir-senha/', RedefinirSenhaViewSet.as_view()),
 ]
 
 urlpatterns = [

@@ -1,37 +1,14 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.fields import empty
 from rest_framework.generics import get_object_or_404
 
 from ivh_inventario.usuario.models import Usuario
 
 
-class UsuarioLoginSerializer(serializers.Serializer):
-    def validate(self, attrs):
-        username = attrs.get('username')
-        password = attrs.get('password')
-
-        if username and password:
-
-            username = get_object_or_404(Usuario, username=username)
-
-            user = authenticate(username=username, password=password)
-
-            if user:
-                if not user.is_active:
-                    msg = 'User account is disabled.'
-                    raise serializers.ValidationError(msg)
-            else:
-                msg = 'Unable to log in with provided credentials.'
-                raise serializers.ValidationError(msg)
-        else:
-            msg = 'Must include "email or username" and "password"'
-            raise serializers.ValidationError(msg)
-
-        attrs['user'] = user
-        return attrs
-
-    username = serializers.CharField()
-    password = serializers.CharField()
+class UsuarioLoginSerializer(AuthTokenSerializer):
+    pass
 
 
 class UsuarioCadastroSerializer(serializers.ModelSerializer):
@@ -52,8 +29,19 @@ class CRUDUsuarioSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
-
 class TrocarSenhaSerializer(serializers.Serializer):
     senha_nova = serializers.CharField(required=True)
     senha_antiga = serializers.CharField(required=True)
+
+
+class EsqueceuSenhaSerializer(serializers.Serializer):
+    username = serializers.SlugRelatedField(required=True, queryset=Usuario.objects.all(), slug_field="username")
+
+    class Response(serializers.Serializer):
+        mensagem = serializers.CharField()
+
+
+class RedefinicaoSenhaSerializer(serializers.Serializer):
+    username = serializers.SlugRelatedField(required=True, queryset=Usuario.objects.all(), slug_field="username")
+    senha_nova = serializers.CharField(required=True)
+    codigo = serializers.CharField(required=True)
