@@ -1,7 +1,9 @@
 from rest_framework import serializers
 
 from ivh_inventario.entrada.models import Entrada
+from ivh_inventario.item.api.serializers import ItemSerializer
 from ivh_inventario.item.models import Item
+from ivh_inventario.usuario.models import Usuario
 
 
 class CRUDEntradaSerializer(serializers.ModelSerializer):
@@ -11,21 +13,16 @@ class CRUDEntradaSerializer(serializers.ModelSerializer):
 
 
 class POSTEntradaSerializer(serializers.Serializer):
-    quantidade = serializers.IntegerField(required=True, allow_null=False)
-    dt_entrada = serializers.DateField(required=False, allow_null=True)
-    usuario = serializers.UUIDField(required=False, allow_null=True)
-    item = serializers.UUIDField(required=False, allow_null=True)
-    is_bem_de_consumo = serializers.BooleanField(required=True, allow_null=False)
-    grupo = serializers.CharField(required=True, max_length=200, allow_null=False)
-    cod = serializers.CharField(max_length=200, required=False, allow_null=True)
-    doc_fiscal = serializers.CharField(max_length=200, required=False, allow_null=True)
-    is_doacao = serializers.BooleanField(required=True, allow_null=False)
-    validade = serializers.DateField(required=False, allow_null=True)
-    val_unit = serializers.DecimalField(max_digits=15, decimal_places=2, required=False, allow_null=True)
-    val_total = serializers.DecimalField(max_digits=15, decimal_places=2, required=False, allow_null=True)
-    fornecedor = serializers.CharField(max_length=200, required=False, allow_null=True)
-    descricao = serializers.CharField(required=True, allow_null=False)
-    tipo_unit = serializers.CharField(max_length=200, required=False, allow_null=True)
+    dt_entrada = serializers.DateField("Data de entrada")
+    quantidade = serializers.IntegerField(default=1)
+    usuario = serializers.SlugRelatedField(queryset=Usuario.objects.all(), slug_field="uuid")
+    item = ItemSerializer()
 
-
+    def create(self, validated_data=None):
+        data = dict(self.validated_data)
+        item_obj = data['item']
+        item = Item.objects.create(**item_obj)
+        data['item'] = item
+        entrada = Entrada.objects.create(**data)
+        return CRUDEntradaSerializer(instance=entrada).data
 
