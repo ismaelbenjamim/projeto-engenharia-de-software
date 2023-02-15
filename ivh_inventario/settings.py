@@ -61,7 +61,9 @@ INSTALLED_APPS = [
     'ivh_inventario.item',
     'ivh_inventario.entrada',
     'ivh_inventario.saida',
-    'ivh_inventario.usuario'
+    'ivh_inventario.usuario',
+    'ivh_inventario.doador'
+
 ]
 
 AUTH_USER_MODEL = 'usuario.Usuario'
