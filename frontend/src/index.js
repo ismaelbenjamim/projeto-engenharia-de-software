@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Login from './usuario/Login';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Dashboard from './main/dashboard';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root')
@@ -13,9 +13,8 @@ const root = ReactDOM.createRoot(
 root.render(
   <BrowserRouter>
     <Routes>
-        <Route path="/" element={<App />}>
-          <Route path="/dashboard" element={<Login />} />
-        </Route>
+        <Route path="/" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
   </BrowserRouter>
 );
