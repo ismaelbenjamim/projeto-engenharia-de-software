@@ -1,6 +1,6 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Card, Col, Container, Form, InputGroup, Row, ThemeProvider } from 'react-bootstrap';
+import { Button, Card, Col, Container, Form, Row, ThemeProvider } from 'react-bootstrap';
 
 function App() {
   return (
@@ -32,7 +32,7 @@ function App() {
                 </Form.Group>
                 </Col>
                 <Col lg={12} className="mb-4">
-                  <a href='#'>Esqueceu a senha?</a>
+                  <a href='/'>Esqueceu a senha?</a>
                 </Col>
                 <Col className='mb-2'>
                   <Button className='col-12'>Entrar</Button>
