@@ -2,6 +2,8 @@ from uuid import uuid4
 
 from django.db import models
 
+from ivh_inventario.doador.models import Doador
+
 
 class Item(models.Model):
     GRUPO = (
@@ -18,6 +20,7 @@ class Item(models.Model):
     cod = models.CharField(max_length=50, blank=True, null=True)
     doc_fisc = models.FileField(verbose_name="Documento fiscal", blank=True, null=True)
     is_doacao = models.BooleanField()
+    doador = models.ForeignKey(Doador, on_delete=models.CASCADE, null=True, blank=True)
     validade = models.DateField(blank=True, null=True)
     val_unit = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
     val_total = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
