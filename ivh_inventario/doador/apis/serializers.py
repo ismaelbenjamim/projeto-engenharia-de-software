@@ -8,3 +8,7 @@ class CRUDDoadorSerializer(serializers.ModelSerializer):
         model = Doador
         fields = '__all__'
 
+
+class DoadorSerializer(serializers.Serializer):
+    nome = serializers.CharField(required=False, allow_null=True)
+    identificador = serializers.CharField(required=False, allow_null=True)
