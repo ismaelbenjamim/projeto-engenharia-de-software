@@ -56,6 +56,13 @@ class CRUDUsuarioViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
+    def list(self, request, *args, **kwargs):
+        if not self.request.user.is_superuser:
+            usuario = Usuario.objects.get(pk=self.request.user.pk)
+            serializer = self.get_serializer(usuario)
+            return Response(serializer.data)
+        else:
+            return super().list(request, *args, **kwargs)
 
 class UsuarioCadastroViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
