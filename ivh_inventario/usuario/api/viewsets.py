@@ -150,7 +150,7 @@ class EsqueceuSenhaViewSet(APIView):
             )
             return Response({'mensagem': "E-mail de redefinição de senha enviado"}, status=status.HTTP_200_OK)
         else:
-            Response({'mensagem': "Usuário com este e-mail não encontrado"}, status=status.HTTP_400_BAD_REQUEST)
+            Response({'mensagem': "Usuário com este username não encontrado"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RedefinirSenhaViewSet(APIView):

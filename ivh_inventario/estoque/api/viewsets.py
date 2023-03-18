@@ -30,5 +30,8 @@ class CRUDEstoqueViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(item__grupo=grupo)
 
         return queryset
+    
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 

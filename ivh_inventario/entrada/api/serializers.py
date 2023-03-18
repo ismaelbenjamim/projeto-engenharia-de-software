@@ -3,6 +3,7 @@ from rest_framework import serializers
 from ivh_inventario.doador.apis.serializers import CRUDDoadorSerializer
 from ivh_inventario.doador.models import Doador
 from ivh_inventario.entrada.models import Entrada
+from ivh_inventario.estoque.models import Estoque
 from ivh_inventario.item.api.serializers import ItemSerializer
 from ivh_inventario.item.models import Item
 from ivh_inventario.usuario.models import Usuario
@@ -44,5 +45,6 @@ class POSTEntradaSerializer(serializers.Serializer):
         data['item'] = item
 
         entrada = Entrada.objects.create(**data)
+        Estoque.objects.create(estoque_atual=data['quantidade'], item=item)
         return CRUDEntradaSerializer(instance=entrada).data
 

@@ -16,22 +16,22 @@ export default () => {
           <Row className="justify-content-center">
             <p className="text-center">
               <Card.Link as={Link} to={Routes.Signin.path} className="text-gray-700">
-                <FontAwesomeIcon icon={faAngleLeft} className="me-2" /> Back to sign in
+                <FontAwesomeIcon icon={faAngleLeft} className="me-2" /> Volte para a área de Login
             </Card.Link>
             </p>
             <Col xs={12} className="d-flex align-items-center justify-content-center">
               <div className="signin-inner my-3 my-lg-0 bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500">
-                <h3>Forgot your password?</h3>
-                <p className="mb-4">Don't fret! Just type in your email and we will send you a code to reset your password!</p>
+                <h3>Esqueceu sua senha?</h3>
+                <p className="mb-4">Não se assuste! Insira seu nome de usuário que enviaremos uma nova</p>
                 <Form>
                   <div className="mb-4">
-                    <Form.Label htmlFor="email">Your Email</Form.Label>
-                    <InputGroup id="email">
-                      <Form.Control required autoFocus type="email" placeholder="john@company.com" />
+                    <Form.Label htmlFor="email">Seu nome de usuário</Form.Label>
+                    <InputGroup id="username">
+                      <Form.Control required autoFocus type="username" placeholder="Username" />
                     </InputGroup>
                   </div>
                   <Button variant="primary" type="submit" className="w-100">
-                    Recover password
+                    Recuperar a senha
                   </Button>
                 </Form>
               </div>
