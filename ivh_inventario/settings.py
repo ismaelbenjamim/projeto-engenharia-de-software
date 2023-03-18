@@ -106,7 +106,11 @@ WSGI_APPLICATION = 'ivh_inventario.wsgi.application'
 db_default_url = f'sqlite:///{BASE_DIR}/db.sqlite3'
 
 DATABASES = {
-    #'default': db_default_url#config('DATABASE_URL', default=db_default_url, cast=dburl),
+    #'default': config('DATABASE_URL', default=db_default_url, cast=dburl),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 # Password validation
