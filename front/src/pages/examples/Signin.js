@@ -49,13 +49,13 @@ export default () => {
                   <h3 className="mb-0">IVH Inventário</h3>
                 </div>
                 <Form className="mt-4" method='post' onSubmit={(e) => { callForm(e) }}>
-                  <Form.Group id="email" className="mb-4">
-                    <Form.Label>Email</Form.Label>
+                  <Form.Group id="username" className="mb-4">
+                    <Form.Label>Usuário</Form.Label>
                     <InputGroup>
                       <InputGroup.Text>
                         <FontAwesomeIcon icon={faEnvelope} />
                       </InputGroup.Text>
-                      <Form.Control autoFocus required type="text" placeholder="email@gmail.com" onChange={(e) => setUsername(e.target.value)} />
+                      <Form.Control autoFocus required type="text" placeholder="Usuário" onChange={(e) => setUsername(e.target.value)} />
                     </InputGroup>
                   </Form.Group>
                   <Form.Group>
@@ -69,11 +69,11 @@ export default () => {
                       </InputGroup>
                     </Form.Group>
                     <div className="d-flex justify-content-between align-items-center mb-4">
-                      <Form.Check type="checkbox">
+                      {/* <Form.Check type="checkbox">
                         <FormCheck.Input id="defaultCheck5" className="me-2" />
                         <FormCheck.Label htmlFor="defaultCheck5" className="mb-0">Lembre-se</FormCheck.Label>
-                      </Form.Check>
-                      <Card.Link className="small text-end">Esqueceu a senha?</Card.Link>
+                      </Form.Check> */}
+                      <Card.Link as={Link} to={Routes.ForgotPassword.path} className="small text-end">Esqueceu a senha?</Card.Link>
                     </div>
                   </Form.Group>
                   <Button variant="primary" type="submit" className="w-100">
@@ -81,14 +81,14 @@ export default () => {
                   </Button>
                 </Form>
 
-                <div className="d-flex justify-content-center align-items-center mt-4">
+                {/* <div className="d-flex justify-content-center align-items-center mt-4">
                   <span className="fw-normal">
                     Não é registrado?
                     <Card.Link as={Link} to={Routes.Signup.path} className="fw-bold">
                       {` Criar uma conta `}
                     </Card.Link>
                   </span>
-                </div>
+                </div> */}
               </div>
             </Col>
           </Row>
