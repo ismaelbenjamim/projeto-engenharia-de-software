@@ -31,7 +31,7 @@ MANAGERS = ADMINS
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ''#config('SECRET_KEY')
+SECRET_KEY = 'django-insecure-=cldztbc4jg&xl0!x673!*v2_=p$$eu)=7*f#d0#zs$44xx-h^'#config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True#config('DEBUG', default=False, cast=bool)
@@ -106,7 +106,7 @@ WSGI_APPLICATION = 'ivh_inventario.wsgi.application'
 db_default_url = f'sqlite:///{BASE_DIR}/db.sqlite3'
 
 DATABASES = {
-    'default': db_default_url#config('DATABASE_URL', default=db_default_url, cast=dburl),
+    #'default': db_default_url#config('DATABASE_URL', default=db_default_url, cast=dburl),
 }
 
 # Password validation
