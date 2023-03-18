@@ -31,12 +31,12 @@ MANAGERS = ADMINS
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ''#config('SECRET_KEY')
+SECRET_KEY = 'django-insecure-32-w9phd*pzbgvvem943767ax3rh&odlq+q$69$qbb8p3=3m95'#config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True#config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "0.0.0.0", ".vercel.app"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "0.0.0.0", ".vercel.app", ".now.sh"]
 
 # Application definition
 
@@ -106,7 +106,7 @@ WSGI_APPLICATION = 'ivh_inventario.wsgi.application'
 db_default_url = f'sqlite:///{BASE_DIR}/db.sqlite3'
 
 DATABASES = {
-    'default': db_default_url#config('DATABASE_URL', default=db_default_url, cast=dburl),
+    #'default': db_default_url#config('DATABASE_URL', default=db_default_url, cast=dburl),
 }
 
 # Password validation
@@ -144,11 +144,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = f'{BASE_DIR}/staticfiles'
+#STATIC_ROOT = f'{BASE_DIR}/staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = f'{BASE_DIR}/media'
-#STATICFILES_DIRS = os.path.join(BASE_DIR, 'static')
-#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+
+STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
