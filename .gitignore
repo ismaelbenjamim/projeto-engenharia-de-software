@@ -181,3 +181,4 @@ dmypy.json
 # Ignore dynaconf secret files
 .secrets.*
 start.sh
+.vercel
