@@ -1,39 +1,85 @@
-﻿# IVH controle de inventário 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Fdjango&demo-title=Django%20%2B%20Vercel&demo-description=Use%20Django%204%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fdjango-template.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994241/random/django.png)
 
-## Objetivo
+# Django + Vercel
 
-O projeto de controle de inventário tem o objetivo de ajudar na segurança e controle do fluxo de inventário da ONG, tal como o controle de doações e aquisições e as entradas e saídas dos bens de consumo usadas diariamentoe. 
+This example shows how to use Django 4 on Vercel with Serverless Functions using the [Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python).
 
-## Que big idea você propõe para o projeto?
+## Demo
 
-Aplicação web para gestão da organização não governamental.
+https://django-template.vercel.app/
 
-## Que questão essencial você propõe para o projeto?
+## How it Works
 
-- Tecnologias utilizadas no sistema
-- Funcionalidades específicas
+Our Django application, `example` is configured as an installed application in `vercel_app/settings.py`:
 
-## Como você transforma a essential question e a big idea em um desafio similar a uma chamada para a ação?
+```python
+# vercel_app/settings.py
+INSTALLED_APPS = [
+    # ...
+    'example',
+]
+```
 
-- Utilização de Python e Django para construção de um sistema de gestão automatizado e eficiente
+There is a single view which renders the current time in `example/views.py`:
 
-## Que questões norteadoras você propõe para explorar e aprender mais sobre o desafio?
+```python
+# example/views.py
+from datetime import datetime
 
-- Dificuldades em realização de atividades manuais
-- Falta de segurança no controle de dados 
+from django.http import HttpResponse
 
-## Contribuidores
 
-- Bárbara Vaz
-- Dante Santana
-- Ismael Benjamim
-- Marco Antônio
-- Tiago Bello
+def index(request):
+    now = datetime.now()
+    html = f'''
+    <html>
+        <body>
+            <h1>Hello from Vercel!</h1>
+            <p>The current time is { now }.</p>
+        </body>
+    </html>
+    '''
+    return HttpResponse(html)
+```
 
-## Tecnologias
+This view is exposed a URL through `example/urls.py`:
 
-- Python
-- Django
-- Javascript
-- html 
-- css ( bootstrap )
+```python
+# example/urls.py
+from django.urls import path
+
+from example.views import index
+
+
+urlpatterns = [
+    path('', index),
+]
+```
+
+Finally, it's made accessible to the Django server inside `vercel_app/urls.py`:
+
+```python
+# vercel_app/urls.py
+from django.urls import path, include
+
+urlpatterns = [
+    ...
+    path('', include('example.urls')),
+]
+```
+
+This example uses the Web Server Gateway Interface (WSGI) with Django to enable handling requests on Vercel with Serverless Functions.
+
+## Running Locally
+
+```bash
+python manage.py runserver
+```
+
+Your Django application is now available at `http://localhost:8000`.
+
+## One-Click Deploy
+
+Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Fdjango&demo-title=Django%20%2B%20Vercel&demo-description=Use%20Django%204%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fdjango-template.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994241/random/django.png)

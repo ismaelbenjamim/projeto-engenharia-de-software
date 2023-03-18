@@ -1,8 +1,0 @@
-SECRET_KEY=AquiVemSuaMegaSuperChaveSecreta
-DEBUG=True
-ALLOWED_HOSTS=127.0.0.1,localhost,0.0.0.0
-EMAIL_HOST="smtp.gmail.com"
-EMAIL_HOST_USER="email@gmail.com"
-EMAIL_HOST_PASSWORD="password"
-SITE_EMAIL="noreply@ivh.org"
-SITE_DOMINIO="http://127.0.0.1:8000"
