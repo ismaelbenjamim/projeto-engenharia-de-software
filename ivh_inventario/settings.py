@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os.path
 from pathlib import Path
 from decouple import config, Csv
 from dj_database_url import parse as dburl
@@ -36,7 +36,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "0.0.0.0", ".vercel.app"]
+ALLOWED_HOSTS = [".vercel.app", ".now.sh"]
 
 # Application definition
 
@@ -144,9 +144,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = f'{BASE_DIR}/staticfiles'
+#STATIC_ROOT = f'{BASE_DIR}/staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = f'{BASE_DIR}/media'
+STATICFILES_DIRS = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
