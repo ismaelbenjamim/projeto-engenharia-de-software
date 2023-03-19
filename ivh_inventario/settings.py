@@ -107,7 +107,7 @@ WSGI_APPLICATION = 'ivh_inventario.wsgi.application'
 
 db_default_url = f'sqlite:///{BASE_DIR}/db.sqlite3'
 
-if DEBUG:
+if not DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
