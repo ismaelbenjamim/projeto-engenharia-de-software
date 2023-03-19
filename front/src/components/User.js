@@ -1,11 +1,12 @@
 import axios from "axios";
+import { BASE_URL } from "../api";
 import { getToken } from "../pages/authentication/auth"
 
 export const usuarioInfo = () => {
     const token = getToken();
     async function getData() {
         let res = await axios({
-            url: 'http://127.0.0.1:8000/api/usuarios/usuario/',
+            url: BASE_URL + '/api/usuarios/usuario/',
             method: 'get',
             timeout: 8000,
             headers: {

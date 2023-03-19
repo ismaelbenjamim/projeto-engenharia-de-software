@@ -10,6 +10,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import BgImage from "../../assets/img/illustrations/signin.svg";
 import { login } from "../authentication/auth";
+import { BASE_URL } from "../../api";
 
 
 export default () => {
@@ -17,7 +18,7 @@ export default () => {
   const [password, setPassword] = useState('');
   const history = useHistory();
   function postData() {
-      axios.post('http://127.0.0.1:8000/api/login/', {
+      axios.post(BASE_URL + '/api/login/', {
           "username": username,
           "password": password,
       },

@@ -108,11 +108,15 @@ WSGI_APPLICATION = 'ivh_inventario.wsgi.application'
 db_default_url = f'sqlite:///{BASE_DIR}/db.sqlite3'
 
 DATABASES = {
-    'default': config('DATABASE_URL', default=db_default_url, cast=dburl),
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
+    'default': config('DATABASE_URL', default=db_default_url, cast=dburl) if debug else 
+    'default': {
+       'ENGINE': 'django.db.backends.postgresql',
+       'NAME': 'railway',
+       'USER': 'postgres',
+       'PASSWORD': 'z0mf8vNWlrSyngIZ62w6',
+       'HOST': 'containers-us-west-71.railway.app',
+       'PORT': '7370',
+    }
 }
 
 # Password validation
