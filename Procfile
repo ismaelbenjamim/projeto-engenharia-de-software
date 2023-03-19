@@ -1,0 +1,1 @@
+web: gunicorn 'ivh_inventario.wsgi'
