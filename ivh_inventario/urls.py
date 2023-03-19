@@ -6,7 +6,6 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
-from ivh_inventario.core.views import IndexView
 from ivh_inventario.entrada.api.viewsets import CRUDEntradaViewSet
 from ivh_inventario.estoque.api.viewsets import CRUDEstoqueViewSet
 from ivh_inventario.openapi_config import HttpsSchemaGenerator
