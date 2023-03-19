@@ -1,0 +1,1 @@
+export const BASE_URL = "https://projeto-engenharia-de-software-production.up.railway.app";
