@@ -31,10 +31,10 @@ MANAGERS = ADMINS
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-32-w9phd*pzbgvvem943767ax3rh&odlq+q$69$qbb8p3=3m95'#config('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True#config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ALLOWED_HOST = ['*']
 
@@ -108,11 +108,11 @@ WSGI_APPLICATION = 'ivh_inventario.wsgi.application'
 db_default_url = f'sqlite:///{BASE_DIR}/db.sqlite3'
 
 DATABASES = {
-    #'default': config('DATABASE_URL', default=db_default_url, cast=dburl),
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': config('DATABASE_URL', default=db_default_url, cast=dburl),
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
 }
 
 # Password validation
@@ -193,13 +193,13 @@ EMAIL
 '''
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = ''#config('EMAIL_HOST')
+EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = ''#config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = ''#config('EMAIL_HOST_PASSWORD')
-SITE_DOMINIO = ''#config("SITE_DOMINIO")
-SITE_EMAIL = ''#config("SITE_EMAIL")
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+SITE_DOMINIO = config("SITE_DOMINIO")
+SITE_EMAIL = config("SITE_EMAIL")
 
 
 '''
