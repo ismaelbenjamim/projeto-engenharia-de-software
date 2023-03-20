@@ -214,5 +214,7 @@ SITE_EMAIL = config("SITE_EMAIL")
 CORS
 '''
 
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = ['*']
+CORS_ORIGIN_ALLOW_ALL = True
+"""CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000'
+]"""
