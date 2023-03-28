@@ -8,8 +8,11 @@ from ivh_inventario.usuario.models import Usuario
 
 
 class UsuarioLoginSerializer(AuthTokenSerializer):
-    pass
+    username = serializers.SlugRelatedField(queryset=Usuario.objects.all(), slug_field='email', required=False)
 
+    def validate(self, attrs):
+        attrs['username'] = attrs.get('username').username
+        return super().validate(attrs)
 
 class UsuarioCadastroSerializer(serializers.ModelSerializer):
     class Meta:

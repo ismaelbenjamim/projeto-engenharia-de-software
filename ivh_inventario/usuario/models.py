@@ -38,7 +38,6 @@ class Notificacao(models.Model):
     def full_clean(self, exclude=None, validate_unique=True):
         super().full_clean(exclude=None, validate_unique=True)
         if self.tipo_notificacao != "PRIVADA" and self.destino:
-            print("aa")
             raise ValidationError({
                 'destino': 'Não é possível adicionar destino se o tipo_notificacao não for privada'
             })
