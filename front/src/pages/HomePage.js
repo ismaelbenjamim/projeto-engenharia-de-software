@@ -50,6 +50,7 @@ import Tooltips from "./components/Tooltips";
 import Toasts from "./components/Toasts";
 
 import { isAuthenticated } from "./authentication/auth";
+import EstoqueAtual from './estoque/EstoqueAtual';
 
 const RouteWithLoader = ({ component: Component, ...rest }) => {
   const [loaded, setLoaded] = useState(false);
@@ -133,7 +134,7 @@ export default () => (
     {/* pages */}
     <RouteWithSidebar exact path={Routes.DashboardOverview.path} component={DashboardOverview} />
     <RouteWithSidebar exact path={Routes.Upgrade.path} component={Upgrade} />
-    <RouteWithSidebar exact path={Routes.Transactions.path} component={Transactions} />
+    <RouteWithSidebar exact path={Routes.EstoqueAtual.path} component={EstoqueAtual} />
     <RouteWithSidebar exact path={Routes.Settings.path} component={Settings} />
     <RouteWithSidebar exact path={Routes.BootstrapTables.path} component={BootstrapTables} />
 

@@ -44,8 +44,9 @@ export default () => {
       <Row className="justify-content-md-center">
         <Col xs={12} className="mb-4 d-none d-sm-block">
           <SalesValueWidget
-            title="Sales Value"
+            title="Estoque atual"
             value="10,567"
+            
             percentage={10.57}
           />
         </Col>

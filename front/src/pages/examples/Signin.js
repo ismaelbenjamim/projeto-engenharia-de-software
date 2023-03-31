@@ -7,33 +7,29 @@ import { Link } from 'react-router-dom';
 
 import { Routes } from "../../routes";
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
 import BgImage from "../../assets/img/illustrations/signin.svg";
 import { login } from "../authentication/auth";
-import { BASE_URL } from "../../api";
+import api from "../authentication/api";
 
 
 export default () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState('');
   const history = useHistory();
   function postData() {
-      axios.post(BASE_URL + '/api/login/', {
-          "username": username,
-          "password": password,
-      },
-          {
-              headers: {
-                  "Content-Type": "application/json"
-              }
-          })
-          .then(function (response) {
-            login(response.data.token);
-            history.push("/dashboard");
-          })
-          .catch(function (error) {
-              console.error(error)
-          });
+    api.post('login/', {
+      "username": username,
+      "password": password,
+    },).then(function (response) {
+      login(response.data.token);
+      history.push("/dashboard");
+    }).catch(function (error) {
+      console.log(error);
+      if (error.status !== 200) {
+        setErrors("E-mail ou senha estão incorretos.");
+      }
+    });
   }
   function callForm(e) {
       postData();
@@ -51,12 +47,12 @@ export default () => {
                 </div>
                 <Form className="mt-4" method='post' onSubmit={(e) => { callForm(e) }}>
                   <Form.Group id="username" className="mb-4">
-                    <Form.Label>Usuário</Form.Label>
+                    <Form.Label>Email</Form.Label>
                     <InputGroup>
                       <InputGroup.Text>
                         <FontAwesomeIcon icon={faEnvelope} />
                       </InputGroup.Text>
-                      <Form.Control autoFocus required type="text" placeholder="Usuário" onChange={(e) => setUsername(e.target.value)} />
+                      <Form.Control autoFocus required type="email" placeholder="Email" onChange={(e) => setUsername(e.target.value)} />
                     </InputGroup>
                   </Form.Group>
                   <Form.Group>
@@ -76,6 +72,9 @@ export default () => {
                       </Form.Check> */}
                       <Card.Link as={Link} to={Routes.ForgotPassword.path} className="small text-end">Esqueceu a senha?</Card.Link>
                     </div>
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <Form.Text>{errors}</Form.Text>
                   </Form.Group>
                   <Button variant="primary" type="submit" className="w-100">
                     Entrar
