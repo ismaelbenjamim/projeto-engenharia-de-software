@@ -32,6 +32,7 @@ class CRUDEstoqueViewSet(viewsets.ModelViewSet):
         return queryset
     
     def list(self, request, *args, **kwargs):
+        self.serializer_class = self.serializer_class.EstoqueGet
         return super().list(request, *args, **kwargs)
 
 
