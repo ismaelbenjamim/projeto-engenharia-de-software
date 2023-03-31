@@ -258,22 +258,9 @@ export const TransactionsTable = () => {
         <Table hover className="user-table align-items-center">
           <thead>
             <tr>
-              <th className="border-bottom">#</th>
-              <th className="border-bottom">Data de entrada</th>
-              <th className="border-bottom">Quantidade</th>
-              <th className="border-bottom">Usuário</th>
-              <th className="border-bottom">É bem de consumo</th>
-              <th className="border-bottom">Grupo</th>
-              <th className="border-bottom">Código</th>
-              <th className="border-bottom">Documento fiscal</th>
-              <th className="border-bottom">É Doação</th>
-              <th className="border-bottom">Doador</th>
-              <th className="border-bottom">Validade</th>
-              <th className="border-bottom">Valor unitário</th>
-              <th className="border-bottom">Valor total</th>
-              <th className="border-bottom">Fornecedor</th>
               <th className="border-bottom">Descrição</th>
-              <th className="border-bottom">Tipo unitário</th>
+              <th className="border-bottom">Fornecedor</th>
+              <th className="border-bottom">Quantidade</th>
             </tr>
           </thead>
           <tbody>
