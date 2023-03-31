@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 import { Routes } from "../routes";
 import { pageVisits, pageTraffic, pageRanking } from "../data/tables";
-import transactions from "../data/transactions";
+import { EstoqueAtual } from "../data/transactions";
 import commands from "../data/commands";
 
 const ValueChange = ({ value, suffix }) => {
@@ -188,7 +188,7 @@ export const RankingTable = () => {
 };
 
 export const TransactionsTable = () => {
-  const totalTransactions = transactions.length;
+  const totalTransactions = EstoqueAtual().length;
 
   const TableRow = (props) => {
     const { invoiceNumber, subscription, price, issueDate, dueDate, status } = props;
@@ -237,13 +237,13 @@ export const TransactionsTable = () => {
             </Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Item>
-                <FontAwesomeIcon icon={faEye} className="me-2" /> View Details
+                <FontAwesomeIcon icon={faEye} className="me-2" /> Detalhes
               </Dropdown.Item>
               <Dropdown.Item>
-                <FontAwesomeIcon icon={faEdit} className="me-2" /> Edit
+                <FontAwesomeIcon icon={faEdit} className="me-2" /> Editar
               </Dropdown.Item>
               <Dropdown.Item className="text-danger">
-                <FontAwesomeIcon icon={faTrashAlt} className="me-2" /> Remove
+                <FontAwesomeIcon icon={faTrashAlt} className="me-2" /> Remover
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
@@ -259,16 +259,25 @@ export const TransactionsTable = () => {
           <thead>
             <tr>
               <th className="border-bottom">#</th>
-              <th className="border-bottom">Bill For</th>
-              <th className="border-bottom">Issue Date</th>
-              <th className="border-bottom">Due Date</th>
-              <th className="border-bottom">Total</th>
-              <th className="border-bottom">Status</th>
-              <th className="border-bottom">Action</th>
+              <th className="border-bottom">Data de entrada</th>
+              <th className="border-bottom">Quantidade</th>
+              <th className="border-bottom">Usuário</th>
+              <th className="border-bottom">É bem de consumo</th>
+              <th className="border-bottom">Grupo</th>
+              <th className="border-bottom">Código</th>
+              <th className="border-bottom">Documento fiscal</th>
+              <th className="border-bottom">É Doação</th>
+              <th className="border-bottom">Doador</th>
+              <th className="border-bottom">Validade</th>
+              <th className="border-bottom">Valor unitário</th>
+              <th className="border-bottom">Valor total</th>
+              <th className="border-bottom">Fornecedor</th>
+              <th className="border-bottom">Descrição</th>
+              <th className="border-bottom">Tipo unitário</th>
             </tr>
           </thead>
           <tbody>
-            {transactions.map(t => <TableRow key={`transaction-${t.invoiceNumber}`} {...t} />)}
+            {EstoqueAtual().map(t => <TableRow key={`transaction-${t.uuid}`} {...t} />)}
           </tbody>
         </Table>
         <Card.Footer className="px-3 border-0 d-lg-flex align-items-center justify-content-between">

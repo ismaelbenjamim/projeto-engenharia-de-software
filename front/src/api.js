@@ -1,1 +1,0 @@
-export const BASE_URL = "https://ivh-inventario.up.railway.app";

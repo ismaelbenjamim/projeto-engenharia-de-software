@@ -3,7 +3,7 @@ export const Routes = {
     // pages
     Presentation: { path: "/a" },
     DashboardOverview: { path: "/dashboard" },
-    Transactions: { path: "/transactions" },
+    EstoqueAtual: { path: "/estoque-atual" },
     Settings: { path: "/settings" },
     Upgrade: { path: "/upgrade" },
     BootstrapTables: { path: "/tables/bootstrap-tables" },

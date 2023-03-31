@@ -22,9 +22,9 @@ export default [
     },
     {
         "id": 2,
-        "name": "Transactions",
+        "name": "Estoque Atual",
         "image": TransactionsImg,
-        "link": Routes.Transactions.path
+        "link": Routes.EstoqueAtual.path
     },
     {
         "id": 3,

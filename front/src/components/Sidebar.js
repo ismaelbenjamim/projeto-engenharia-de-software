@@ -100,7 +100,7 @@ export default (props = {}) => {
               <NavItem title="IVH Inventário" link="#" image={ReactHero} />
 
               <NavItem title="Dashboard" link={Routes.DashboardOverview.path} icon={faChartPie} />
-              <NavItem title="Transactions" icon={faHandHoldingUsd} link={Routes.Transactions.path} />
+              <NavItem title="Estoque Atual" icon={faHandHoldingUsd} link={Routes.EstoqueAtual.path} />
               <NavItem title="Settings" icon={faCog} link={Routes.Settings.path} />
 
               <CollapsableNavItem eventKey="tables/" title="Tables" icon={faTable}>

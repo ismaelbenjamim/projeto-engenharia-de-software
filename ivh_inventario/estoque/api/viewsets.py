@@ -15,7 +15,7 @@ class CRUDEstoqueViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = super().get_queryset()
 
         is_doacao = self.request.query_params.get('is_doacao')
         is_bem_de_consumo = self.request.query_params.get('is_bem_de_consumo')

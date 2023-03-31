@@ -1,14 +1,18 @@
 import axios from "axios";
 import { getToken } from "./auth";
 
+const BASE_URL = process.env.REACT_APP_BASE_URL + "/api/";
+
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000"
+  baseURL: BASE_URL
 });
+
+api.defaults.headers.common["Content-Type"] = "application/json"
 
 api.interceptors.request.use(async config => {
   const token = getToken();
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Token ${token}`;
   }
   return config;
 });
