@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 
 from ivh_inventario.core.utils.email import enviar_email_template
 from ivh_inventario.core.utils.gerador_codigo import geracao_codigo
+from ivh_inventario.core.utils.organiza_documentacao import documentacao
 from ivh_inventario.usuario.api.serializers import UsuarioLoginSerializer, UsuarioCadastroSerializer, \
     CRUDUsuarioSerializer, TrocarSenhaSerializer, EsqueceuSenhaSerializer, RedefinicaoSenhaSerializer
 from ivh_inventario.usuario.models import Usuario
@@ -20,13 +21,14 @@ class UsuarioLoginViewSet(ObtainAuthToken):
     serializer_class = UsuarioLoginSerializer
     usuario = None
 
-    docs = {
-        "post": {
-            "operation_summary": "Login de usuário",
-            "operation_description": "Autenticação de usuários",
-            "request_body": UsuarioLoginSerializer
-        }
-    }
+    docs = documentacao(
+        metodo='post',
+        operation_summary='Login de usuário',
+        operation_description='Autenticação de usuários',
+        request_body=UsuarioLoginSerializer,
+        response201=UsuarioLoginSerializer
+
+    )
 
     def get_token(self):
         if not self.usuario.is_superuser:
@@ -56,6 +58,45 @@ class CRUDUsuarioViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
+    docs_list = documentacao(
+        metodo='get',
+        operation_summary='List de usuário',
+        operation_description='API para listar os usuários',
+        response200=CRUDUsuarioSerializer
+    )
+    docs_read = documentacao(
+        metodo='get',
+        operation_summary='Read de usuário',
+        operation_description='API para buscar usuário específico',
+        response200=CRUDUsuarioSerializer
+    )
+    docs_post = documentacao(
+        metodo='post',
+        operation_summary='Create de usuário',
+        operation_description='API para adicionar um novo usuário',
+        request_body=CRUDUsuarioSerializer,
+        response200=CRUDUsuarioSerializer
+    )
+    docs_put = documentacao(
+        metodo='put',
+        operation_summary='Put de usuário',
+        operation_description='API para modificar um usuário',
+        response200=CRUDUsuarioSerializer
+    )
+    docs_patch = documentacao(
+        metodo='patch',
+        operation_summary='Patch de usuário',
+        operation_description='API para modificar parcialmente um usuário',
+        response200=CRUDUsuarioSerializer
+    )
+    docs_delete = documentacao(
+        metodo='delete',
+        operation_summary='Delete de usuário',
+        operation_description='API para deletar um usuário',
+        response200=CRUDUsuarioSerializer
+    )
+
+    @swagger_auto_schema(**docs_list['get'])
     def list(self, request, *args, **kwargs):
         if not self.request.user.is_superuser:
             usuario = Usuario.objects.get(pk=self.request.user.pk)
@@ -64,6 +105,26 @@ class CRUDUsuarioViewSet(viewsets.ModelViewSet):
         else:
             return super().list(request, *args, **kwargs)
 
+    @swagger_auto_schema(**docs_read['get'])
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    @swagger_auto_schema(**docs_post['post'])
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @swagger_auto_schema(**docs_put['put'])
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @swagger_auto_schema(**docs_patch['patch'])
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+    @swagger_auto_schema(**docs_delete['delete'])
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
 class UsuarioCadastroViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioCadastroSerializer
@@ -71,7 +132,16 @@ class UsuarioCadastroViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
+    docs = documentacao(
+        metodo='post',
+        operation_summary='Cadastro de usuário',
+        operation_description='API para o cadastro de usuário',
+        request_body=UsuarioCadastroSerializer,
+        response200=UsuarioCadastroSerializer,
 
+    )
+
+    @swagger_auto_schema(**docs['post'])
     def create(self, request, *args, **kwargs):
         self.serializer_class = UsuarioCadastroSerializer
         usuario_logado = self.request.user
@@ -102,7 +172,15 @@ class TrocarSenhaViewSet(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    @swagger_auto_schema(request_body=TrocarSenhaSerializer)
+    docs = documentacao(
+        metodo='post',
+        operation_summary='Trocar a senha',
+        operation_description='API para trocar a senha do usuário',
+        request_body=TrocarSenhaSerializer,
+        response201=TrocarSenhaSerializer
+    )
+
+    @swagger_auto_schema(**docs['post'])
     def post(self, request):
         serializer = TrocarSenhaSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -122,16 +200,13 @@ class TrocarSenhaViewSet(APIView):
 class EsqueceuSenhaViewSet(APIView):
     http_method_names = ['post']
 
-    docs = {
-        "post": {
-            "operation_summary": "Esqueceu a senha",
-            "operation_description": "Esquecimento de senha de usuário",
-            "request_body": EsqueceuSenhaSerializer,
-            "responses": {
-                "200": EsqueceuSenhaSerializer.Response()
-            }
-        }
-    }
+    docs = documentacao(
+        metodo='post',
+        operation_summary='Esqueceu a senha',
+        operation_description='Api para quando o usuário esquecer a senha ',
+        request_body=EsqueceuSenhaSerializer,
+        response200=EsqueceuSenhaSerializer.Response()
+    )
 
     @swagger_auto_schema(**docs['post'])
     def post(self, request):
@@ -156,16 +231,13 @@ class EsqueceuSenhaViewSet(APIView):
 class RedefinirSenhaViewSet(APIView):
     http_method_names = ['post']
 
-    docs = {
-        "post": {
-            "operation_summary": "Redefinir a senha",
-            "operation_description": "Redefinição de senha de usuário",
-            "request_body": RedefinicaoSenhaSerializer,
-            "responses": {
-                "200": EsqueceuSenhaSerializer.Response()
-            }
-        }
-    }
+    docs = documentacao(
+        metodo='post',
+        operation_summary='Redefinir a senha',
+        operation_description='API para redefinir a senha do usuário',
+        request_body=RedefinicaoSenhaSerializer,
+        response200=EsqueceuSenhaSerializer.Response()
+    )
 
     @swagger_auto_schema(**docs['post'])
     def post(self, request):
