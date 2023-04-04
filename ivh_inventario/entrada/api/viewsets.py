@@ -93,3 +93,22 @@ class CRUDEntradaViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         response = serializer.create()
         return Response(response, status=status.HTTP_201_CREATED)
+
+
+class EntradasXLSViewSet(viewsets.ModelViewSet):
+    queryset = Entrada.objects.all()
+    serializer_class = CRUDEntradaSerializer
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        queryset = self.queryset
+        data_inicio = self.request.query_params.get('data_inicio')
+        data_fim = self.request.query_params.get('data_fim')
+
+        if data_inicio and data_fim:
+            queryset = queryset.filter(dt_entrada__gte=data_inicio, dt_entrada__lte=data_fim)
+
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
