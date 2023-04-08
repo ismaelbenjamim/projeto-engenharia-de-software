@@ -1,14 +1,16 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp, faArrowDown, faArrowUp, faEdit, faEllipsisH, faExternalLinkAlt, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { Col, Row, Nav, Card, Image, Button, Table, Dropdown, ProgressBar, Pagination, ButtonGroup } from '@themesberg/react-bootstrap';
+import { Col, Row, Nav, Card, Image, Button, Table, Dropdown, ProgressBar, Pagination, ButtonGroup, Modal, Form } from '@themesberg/react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { Routes } from "../routes";
 import { pageVisits, pageTraffic, pageRanking } from "../data/tables";
-import { EstoqueAtual } from "../data/transactions";
 import commands from "../data/commands";
+import api from "../pages/authentication/api";
+import ReactPaginate from 'react-paginate';
+
 
 const ValueChange = ({ value, suffix }) => {
   const valueIcon = value < 0 ? faAngleDown : faAngleUp;
@@ -188,106 +190,148 @@ export const RankingTable = () => {
 };
 
 export const TransactionsTable = () => {
-  const totalTransactions = EstoqueAtual().length;
+  const [resultsPerPage] = useState(5);
+  const [resultsTotal, setResultsTotal] = useState(0);
+  const [offset, setOffset] = useState(1);
+  const [pageCount, setPageCount] = useState(0)
 
+  const [instance_obj, setObjectModal] = useState({});
+  const [showDefault, setShowDefault] = useState(false);
+  const handleClose = () => setShowDefault(false);
+
+  const handlePageClick = (event) => {
+    const selectedPage = event.selected;
+    setOffset(selectedPage + 1)
+  };
+
+  const getModal = (item) => {
+    setObjectModal(item);
+    setShowDefault(true);
+  }
+
+  const [estoque, setEstoque_atual] = useState([]);
+  useEffect(() => {
+    api.get('estoques/estoque/').then((res) => {
+      const data = res.data;
+      const slice = data.slice(offset - 1 , offset - 1 + resultsPerPage)
+      setResultsTotal(data.length);
+      setEstoque_atual(slice);
+      setPageCount(Math.ceil(data.length / resultsPerPage))
+    });
+  }, [offset]);
   const TableRow = (props) => {
-    const { invoiceNumber, subscription, price, issueDate, dueDate, status } = props;
-    const statusVariant = status === "Paid" ? "success"
-      : status === "Due" ? "warning"
-        : status === "Canceled" ? "danger" : "primary";
+    const { uuid, item, estoque_atual } = props;
 
     return (
       <tr>
         <td>
           <Card.Link as={Link} to={Routes.Invoice.path} className="fw-normal">
-            {invoiceNumber}
+            {item.cod}
           </Card.Link>
         </td>
         <td>
           <span className="fw-normal">
-            {subscription}
+            {item.descricao}
           </span>
         </td>
         <td>
           <span className="fw-normal">
-            {issueDate}
+            {item.fornecedor}
           </span>
         </td>
         <td>
           <span className="fw-normal">
-            {dueDate}
+            {estoque_atual}
           </span>
         </td>
         <td>
-          <span className="fw-normal">
-            ${parseFloat(price).toFixed(2)}
-          </span>
-        </td>
-        <td>
-          <span className={`fw-normal text-${statusVariant}`}>
-            {status}
-          </span>
-        </td>
-        <td>
-          <Dropdown as={ButtonGroup}>
-            <Dropdown.Toggle as={Button} split variant="link" className="text-dark m-0 p-0">
-              <span className="icon icon-sm">
-                <FontAwesomeIcon icon={faEllipsisH} className="icon-dark" />
-              </span>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item>
-                <FontAwesomeIcon icon={faEye} className="me-2" /> Detalhes
-              </Dropdown.Item>
-              <Dropdown.Item>
-                <FontAwesomeIcon icon={faEdit} className="me-2" /> Editar
-              </Dropdown.Item>
-              <Dropdown.Item className="text-danger">
-                <FontAwesomeIcon icon={faTrashAlt} className="me-2" /> Remover
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+        <Button variant="link" className="text-dark me-2 p-0" onClick={() => getModal(item)}><FontAwesomeIcon icon={faEye} className="" /></Button>
+        <Button variant="link" className="text-dark me-2 p-0"><FontAwesomeIcon icon={faEdit} className="" /></Button>
+        <Button variant="link" className="text-danger me-2 p-0"><FontAwesomeIcon icon={faTrashAlt} className="" /></Button>
         </td>
       </tr>
     );
   };
 
   return (
-    <Card border="light" className="table-wrapper table-responsive shadow-sm">
-      <Card.Body className="pt-0">
-        <Table hover className="user-table align-items-center">
-          <thead>
+    <Card border="light" className="shadow-sm">
+      <Card.Body className="pb-0">
+        <Table responsive className="table-centered table-nowrap rounded mb-0">
+          <thead className="thead-light">
             <tr>
+              <th className="border-bottom">Código</th>
               <th className="border-bottom">Descrição</th>
               <th className="border-bottom">Fornecedor</th>
               <th className="border-bottom">Quantidade</th>
+              <th className="border-bottom"></th>
             </tr>
           </thead>
           <tbody>
-            {EstoqueAtual().map(t => <TableRow key={`transaction-${t.uuid}`} {...t} />)}
+            {estoque.map(t => <TableRow key={`transaction-${t.uuid}`} {...t} />)}
           </tbody>
         </Table>
         <Card.Footer className="px-3 border-0 d-lg-flex align-items-center justify-content-between">
           <Nav>
-            <Pagination className="mb-2 mb-lg-0">
-              <Pagination.Prev>
-                Previous
-              </Pagination.Prev>
-              <Pagination.Item active>1</Pagination.Item>
-              <Pagination.Item>2</Pagination.Item>
-              <Pagination.Item>3</Pagination.Item>
-              <Pagination.Item>4</Pagination.Item>
-              <Pagination.Item>5</Pagination.Item>
-              <Pagination.Next>
-                Next
-              </Pagination.Next>
-            </Pagination>
+          <ReactPaginate
+            previousLabel={"Anterior"}
+            previousClassName={"page-item"}
+            previousLinkClassName={"page-link"}
+            nextLabel={"Próximo"}
+            nextClassName={"page-item"}
+            nextLinkClassName={"page-link"}
+            breakLabel={"..."}
+            breakClassName={"break-me"}
+            pageCount={pageCount}
+            onPageChange={handlePageClick}
+            containerClassName={"mb-2 mb-lg-0 pagination"}
+            pageLinkClassName={"page-link"}
+            pageClassName={"page-item"}
+            activeClassName={"active"} />
           </Nav>
           <small className="fw-bold">
-            Showing <b>{totalTransactions}</b> out of <b>25</b> entries
+            Total de <b>{resultsTotal}</b> itens
           </small>
         </Card.Footer>
       </Card.Body>
+      <Modal as={Modal.Dialog} size={"lg"} centered show={showDefault} onHide={handleClose}>
+          <Modal.Header>
+            <Modal.Title className="h6">{instance_obj.descricao}</Modal.Title>
+            <Button variant="close" aria-label="Close" onClick={handleClose} />
+          </Modal.Header>
+          <Modal.Body>
+          <Row>
+            <Col lg={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Código</Form.Label>
+                <Form.Control type="text" value={instance_obj.cod} disabled />
+              </Form.Group>
+            </Col>
+            <Col lg={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Grupo</Form.Label>
+                <Form.Control type="text" value={instance_obj.grupo} disabled />
+              </Form.Group>
+            </Col>
+            <Col lg={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Validade</Form.Label>
+                <Form.Control type="text" value={instance_obj.validade} disabled />
+              </Form.Group>
+            </Col>
+            <Col lg={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Tipo unitário</Form.Label>
+                <Form.Control type="text" value={instance_obj.tipo_unit} disabled />
+              </Form.Group>
+            </Col>
+          </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="link" className="text-gray ms-auto" onClick={handleClose}>
+              Fechar
+          </Button>
+          </Modal.Footer>
+        </Modal>
     </Card>
   );
 };

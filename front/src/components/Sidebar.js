@@ -99,15 +99,15 @@ export default (props = {}) => {
             <Nav className="flex-column pt-3 pt-md-0">
               <NavItem title="IVH Inventário" link="#" image={ReactHero} />
 
+              <Dropdown.Divider className="my-3 border-indigo" />
+
               <NavItem title="Dashboard" link={Routes.DashboardOverview.path} icon={faChartPie} />
-              <NavItem title="Estoque Atual" icon={faHandHoldingUsd} link={Routes.EstoqueAtual.path} />
-              <NavItem title="Settings" icon={faCog} link={Routes.Settings.path} />
+              <NavItem title="Estoque Atual" icon={faHandHoldingUsd} link={Routes.ListEstoqueAtual.path} />
+              <NavItem title="Entrada" icon={faCog} link={Routes.CreateEstoqueAtual.path} />
 
-              <CollapsableNavItem eventKey="tables/" title="Tables" icon={faTable}>
-                <NavItem title="Bootstrap Table" link={Routes.BootstrapTables.path} />
-              </CollapsableNavItem>
+              <Dropdown.Divider className="my-3 border-indigo" />
 
-              <CollapsableNavItem eventKey="examples/" title="Page Examples" icon={faFileAlt}>
+              <CollapsableNavItem eventKey="examples/" title="Páginas" icon={faFileAlt}>
                 <NavItem title="Sign In" link={Routes.Signin.path} />
                 <NavItem title="Sign Up" link={Routes.Signup.path} />
                 <NavItem title="Forgot password" link={Routes.ForgotPassword.path} />
@@ -117,9 +117,7 @@ export default (props = {}) => {
                 <NavItem title="500 Server Error" link={Routes.ServerError.path} />
               </CollapsableNavItem>
 
-              <Dropdown.Divider className="my-3 border-indigo" />
-
-              <CollapsableNavItem eventKey="components/" title="Components" icon={faBoxOpen}>
+              <CollapsableNavItem eventKey="components/" title="Componentes" icon={faBoxOpen}>
                 <NavItem title="Accordion" link={Routes.Accordions.path} />
                 <NavItem title="Alerts" link={Routes.Alerts.path} />
                 <NavItem title="Badges" link={Routes.Badges.path} />
