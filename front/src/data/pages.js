@@ -24,13 +24,13 @@ export default [
         "id": 2,
         "name": "Estoque Atual",
         "image": TransactionsImg,
-        "link": Routes.EstoqueAtual.path
+        "link": Routes.ListEstoqueAtual.path
     },
     {
         "id": 3,
-        "name": "Settings",
+        "name": "Entrada",
         "image": SettingsImg,
-        "link": Routes.Settings.path
+        "link": Routes.CreateEstoqueAtual.path
     },
     {
         "id": 4,

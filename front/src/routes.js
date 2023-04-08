@@ -3,8 +3,8 @@ export const Routes = {
     // pages
     Presentation: { path: "/a" },
     DashboardOverview: { path: "/dashboard" },
-    EstoqueAtual: { path: "/estoque-atual" },
-    Settings: { path: "/settings" },
+    ListEstoqueAtual: { path: "/estoque-atual" },
+    CreateEstoqueAtual: { path: "/estoque-atual/create" },
     Upgrade: { path: "/upgrade" },
     BootstrapTables: { path: "/tables/bootstrap-tables" },
     Billing: { path: "/examples/billing" },

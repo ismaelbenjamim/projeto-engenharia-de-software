@@ -1,7 +1,13 @@
 {
-  "name": "@themesberg/volt-react-dashboard",
-  "description": "Volt React Dashboard is a free and open source admin dashboard template powered by React.js and Bootstrap 5",
-  "author": "Themesberg",
+  "name": "ivh-iventario",
+  "description": "Sistema de controle e gestão de inventário do Instituto Vitória Humana",
+  "authors": [
+    "Ismael Barros",
+    "Tiago Bello",
+    "Dante Santana",
+    "Bárbara Vaz",
+    "Marco Antônio"
+  ],
   "keywords": [
     "bootstrap 5",
     "react",
@@ -14,6 +20,7 @@
     "themesberg"
   ],
   "license": "MIT",
+  "template": "Volt React Dashboard Free",
   "homepage": "https://demo.themesberg.com/volt-react-dashboard",
   "bugs": {
     "url": "https://github.com/themesberg/volt-react-dashboard/issues"
@@ -37,6 +44,7 @@
     "bootstrap": "5.0.0-beta1",
     "chartist": "^0.11.4",
     "chartist-plugin-tooltips-updated": "^0.1.4",
+    "font-awesome": "^4.7.0",
     "moment-timezone": "^0.5.31",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
@@ -46,6 +54,7 @@
     "react-dom": "^16.13.1",
     "react-github-btn": "^1.2.0",
     "react-live": "^2.2.3",
+    "react-paginate": "^8.1.5",
     "react-router-dom": "^5.3.4",
     "react-router-hash-link": "^2.3.1",
     "react-scripts": "3.4.3",
@@ -53,7 +62,7 @@
     "simplebar-react": "^2.3.0"
   },
   "scripts": {
-    "start": "NODE_ENV=development react-scripts start",
+    "start": "DISABLE_ESLINT_PLUGIN=true NODE_ENV=development react-scripts start",
     "prod": "NODE_ENV=production react-scripts start",
     "build": "react-scripts build",
     "build-local": "PUBLIC_URL=./ react-scripts build",

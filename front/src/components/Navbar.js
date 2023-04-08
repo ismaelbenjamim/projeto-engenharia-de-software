@@ -70,7 +70,7 @@ export default (props) => {
               <Form.Group id="topbarSearch">
                 <InputGroup className="input-group-merge search-bar">
                   <InputGroup.Text><FontAwesomeIcon icon={faSearch} /></InputGroup.Text>
-                  <Form.Control type="text" placeholder="Search" />
+                  <Form.Control type="text" placeholder="Buscar" />
                 </InputGroup>
               </Form.Group>
             </Form>

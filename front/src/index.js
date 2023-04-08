@@ -19,6 +19,7 @@ import { BrowserRouter } from "react-router-dom";
 
 // core styles
 import "./scss/volt.scss";
+import 'font-awesome/css/font-awesome.min.css';
 
 // vendor styles
 import "react-datetime/css/react-datetime.css";
