@@ -73,13 +73,14 @@ AUTH_USER_MODEL = 'usuario.Usuario'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'ivh_inventario.urls'
@@ -215,9 +216,9 @@ CORS
 '''
 
 CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ORIGIN_WHITELIST = [
-#     'http://localhost:3000'
-# ]
-# CSRF_TRUSTED_ORIGINS = [
-#     'http://localhost:3000'
-# ]
+
+#CORS_ALLOW_ALL_ORIGINS = True
+#CSRF_TRUSTED_ORIGINS = ["*"]
+#CORS_ORIGIN_WHITELIST = [
+#    'http://localhost:3000'
+#]

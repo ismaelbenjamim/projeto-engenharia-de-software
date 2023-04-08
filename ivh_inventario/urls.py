@@ -6,7 +6,7 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
-from ivh_inventario.entrada.api.viewsets import CRUDEntradaViewSet
+from ivh_inventario.entrada.api.viewsets import CRUDEntradaViewSet, EntradasXLSViewSet
 from ivh_inventario.estoque.api.viewsets import CRUDEstoqueViewSet
 from ivh_inventario.openapi_config import HttpsSchemaGenerator
 from ivh_inventario.saida.api.viewsets import CRUDSaidaViewSet
@@ -31,6 +31,7 @@ schema_view = get_schema_view(
 router = routers.DefaultRouter()
 
 router.register('entradas/entrada', CRUDEntradaViewSet, basename='CRUD de entrada')
+router.register('entradas/entrada-xls', EntradasXLSViewSet, basename='entrada xls')
 router.register('saidas/saida', CRUDSaidaViewSet, basename='CRUD de saida')
 router.register('estoques/estoque', CRUDEstoqueViewSet, basename='CRUD de estoque')
 router.register('usuarios/usuario', CRUDUsuarioViewSet, basename='CRUD de usuário')
