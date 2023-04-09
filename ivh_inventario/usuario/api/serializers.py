@@ -4,7 +4,7 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.fields import empty
 from rest_framework.generics import get_object_or_404
 
-from ivh_inventario.usuario.models import Usuario
+from ivh_inventario.usuario.models import Usuario, Notificacao
 
 
 class UsuarioLoginSerializer(AuthTokenSerializer):
@@ -48,3 +48,10 @@ class RedefinicaoSenhaSerializer(serializers.Serializer):
     username = serializers.SlugRelatedField(required=True, queryset=Usuario.objects.all(), slug_field="username")
     senha_nova = serializers.CharField(required=True)
     codigo = serializers.CharField(required=True)
+
+
+
+class CRUDNotificacaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notificacao
+        fields = '__all__'
