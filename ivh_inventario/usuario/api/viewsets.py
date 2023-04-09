@@ -13,8 +13,9 @@ from ivh_inventario.core.utils.email import enviar_email_template
 from ivh_inventario.core.utils.gerador_codigo import geracao_codigo
 from ivh_inventario.core.utils.organiza_documentacao import documentacao
 from ivh_inventario.usuario.api.serializers import UsuarioLoginSerializer, UsuarioCadastroSerializer, \
-    CRUDUsuarioSerializer, TrocarSenhaSerializer, EsqueceuSenhaSerializer, RedefinicaoSenhaSerializer
-from ivh_inventario.usuario.models import Usuario
+    CRUDUsuarioSerializer, TrocarSenhaSerializer, EsqueceuSenhaSerializer, RedefinicaoSenhaSerializer, \
+    CRUDNotificacaoSerializer
+from ivh_inventario.usuario.models import Usuario, Notificacao
 
 
 class UsuarioLoginViewSet(ObtainAuthToken):
@@ -264,4 +265,92 @@ class RedefinirSenhaViewSet(APIView):
             return Response({'mensagem': "Senha alterada com sucesso!"}, status=status.HTTP_200_OK)
         else:
             return Response({'mensagem': "O código de redefinição está incorreta!"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UsuarioNotificacaoViewSet(viewsets.ModelViewSet):
+    queryset = Notificacao.objects.all()
+    serializer_class = CRUDNotificacaoSerializer
+    http_method_names = ['get', 'post', 'put', 'patch', 'delete']
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    docs_list = documentacao(
+        metodo='get',
+        operation_summary='List de notificação',
+        operation_description='API para listar notifições',
+        response200=CRUDNotificacaoSerializer
+    )
+    docs_read = documentacao(
+        metodo='get',
+        operation_summary='Read de notificação',
+        operation_description='API para buscar notificação específica',
+        response200=CRUDNotificacaoSerializer
+    )
+    docs_post = documentacao(
+        metodo='post',
+        operation_summary='Create de notificação',
+        operation_description='API para adicionar uma nova notificação',
+        request_body=CRUDNotificacaoSerializer,
+        response200=CRUDNotificacaoSerializer
+    )
+    docs_put = documentacao(
+        metodo='put',
+        operation_summary='Put de notificação',
+        operation_description='API para modificar uma notificação',
+        response200=CRUDNotificacaoSerializer
+    )
+    docs_patch = documentacao(
+        metodo='patch',
+        operation_summary='Patch de notificação',
+        operation_description='API para modificar parcialmente uma notificação',
+        response200=CRUDNotificacaoSerializer
+    )
+    docs_delete = documentacao(
+        metodo='delete',
+        operation_summary='Delete de notificação',
+        operation_description='API para deletar uma notificação',
+        response200=CRUDNotificacaoSerializer
+    )
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        params = self.request.query_params
+
+        for campo in self.request.query_params:
+            try:
+                valor = params.get(f'{campo}')
+                queryset = queryset.filter(**{campo: valor})
+            except:
+                pass
+
+        return queryset
+
+    @swagger_auto_schema(**docs_list['get'])
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @swagger_auto_schema(**docs_read['get'])
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    @swagger_auto_schema(**docs_post['post'])
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @swagger_auto_schema(**docs_patch['patch'])
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+    @swagger_auto_schema(**docs_put['put'])
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @swagger_auto_schema(**docs_delete['delete'])
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
+
+
+
+
 
