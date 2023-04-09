@@ -64,6 +64,18 @@ class CRUDEntradaViewSet(viewsets.ModelViewSet):
         response200=CRUDEntradaSerializer
     )
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        params = self.request.query_params
+        for campo in self.request.query_params:
+            try:
+                valor = params.get(f'{campo}')
+                queryset = queryset.filter(**{campo: valor})
+            except:
+                pass
+
+        return queryset
+
     @swagger_auto_schema(**docs_delete['delete'])
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
@@ -111,4 +123,6 @@ class EntradasXLSViewSet(viewsets.ModelViewSet):
         return queryset
 
     def list(self, request, *args, **kwargs):
+        campos = [field.name for field in Entrada._meta.fields]
+        queryset_to_xls(self.queryset, 'Entradas', campos)
         return super().list(request, *args, **kwargs)

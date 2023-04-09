@@ -1021,7 +1021,19 @@ files = [
 [package.extras]
 brotli = ["Brotli"]
 
+[[package]]
+name = "xlwt"
+version = "1.3.0"
+description = "Library to create spreadsheet files compatible with MS Excel 97/2000/XP/2003 XLS files, on any platform, with Python 2.6, 2.7, 3.3+"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "xlwt-1.3.0-py2.py3-none-any.whl", hash = "sha256:a082260524678ba48a297d922cc385f58278b8aa68741596a87de01a9c628b2e"},
+    {file = "xlwt-1.3.0.tar.gz", hash = "sha256:c59912717a9b28f1a3c2a98fd60741014b06b043936dcecbc113eaaada156c88"},
+]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "c2160c1bcbdeb35799299e2a24cdd1895a2636f622faf6c9004f5ef7dbf904aa"
+content-hash = "0cb5d79e2b5a16c91128f8970d4dc2707cf490a681d473b63586f04a73e70a83"

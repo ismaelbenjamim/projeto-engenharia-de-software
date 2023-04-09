@@ -20,6 +20,15 @@ class POSTEntradaSerializer(serializers.Serializer):
     quantidade = serializers.IntegerField(default=1)
     usuario = serializers.SlugRelatedField(queryset=Usuario.objects.all(), slug_field="uuid")
     item = ItemSerializer()
+    is_doacao = serializers.BooleanField()
+    doc_fisc = serializers.FileField(required=False)
+    validade = serializers.DateField(required=False)
+    val_unit = serializers.DecimalField(required=False, max_digits=15, decimal_places=2)
+    val_total = serializers.DecimalField(required=False, max_digits=15, decimal_places=2)
+    fornecedor = serializers.CharField(required=False)
+    tipo_unit = serializers.CharField(required=False)
+    doador = CRUDDoadorSerializer(required=False)
+
 
     def create(self, validated_data=None):
         data = dict(self.validated_data)

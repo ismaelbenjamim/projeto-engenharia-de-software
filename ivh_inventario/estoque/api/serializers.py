@@ -16,6 +16,5 @@ class CRUDEstoqueSerializer(serializers.ModelSerializer):
             fields = '__all__'
 
     class EstoqueParams(serializers.Serializer):
-        is_doacao = serializers.CharField()
-        is_bem_de_consumo = serializers.CharField()
-        grupo = serializers.CharField()
+        is_bem_de_consumo = serializers.CharField(required=False)
+        grupo = serializers.CharField(required=False)

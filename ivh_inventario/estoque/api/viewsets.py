@@ -55,21 +55,15 @@ class CRUDEstoqueViewSet(viewsets.ModelViewSet):
         response200=CRUDEstoqueSerializer
     )
 
-
     def get_queryset(self):
         queryset = super().get_queryset()
-
-        is_doacao = self.request.query_params.get('is_doacao')
-        is_bem_de_consumo = self.request.query_params.get('is_bem_de_consumo')
-        grupo = self.request.query_params.get('grupo')
-
-
-        if is_doacao:
-            queryset = queryset.filter(item__is_doacao=is_doacao)
-        if is_bem_de_consumo:
-            queryset = queryset.filter(item__is_bem_de_consumo=is_bem_de_consumo)
-        if grupo:
-            queryset = queryset.filter(item__grupo=grupo)
+        params = self.request.query_params
+        for campo in self.request.query_params:
+            try:
+                valor = params.get(f'{campo}')
+                queryset = queryset.filter(**{campo: valor})
+            except:
+                pass
 
         return queryset
 

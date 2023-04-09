@@ -96,6 +96,18 @@ class CRUDUsuarioViewSet(viewsets.ModelViewSet):
         response200=CRUDUsuarioSerializer
     )
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        params = self.request.query_params
+        for campo in self.request.query_params:
+            try:
+                valor = params.get(f'{campo}')
+                queryset = queryset.filter(**{campo: valor})
+            except:
+                pass
+
+        return queryset
+
     @swagger_auto_schema(**docs_list['get'])
     def list(self, request, *args, **kwargs):
         if not self.request.user.is_superuser:
