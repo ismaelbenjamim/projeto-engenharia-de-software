@@ -14,3 +14,7 @@ class CRUDEstoqueSerializer(serializers.ModelSerializer):
         class Meta:
             model = Estoque
             fields = '__all__'
+
+    class EstoqueParams(serializers.Serializer):
+        is_bem_de_consumo = serializers.CharField(required=False)
+        grupo = serializers.CharField(required=False)

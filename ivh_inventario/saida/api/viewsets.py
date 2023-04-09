@@ -1,11 +1,13 @@
 import datetime
 
 from django.db.models import Q
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from ivh_inventario.core.utils.organiza_documentacao import documentacao
 from ivh_inventario.estoque.models import Estoque
 from ivh_inventario.saida.api.serializers import CRUDSaidaSerializer
 from ivh_inventario.saida.models import Saida
@@ -18,6 +20,78 @@ class CRUDSaidaViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
+    docs_list = documentacao(
+        metodo='get',
+        operation_summary='List de saída',
+        operation_description='Api para trazer a lista de saídas',
+        response200=CRUDSaidaSerializer
+    )
+    docs_read = documentacao(
+        metodo='get',
+        operation_summary='Read de saída',
+        operation_description='Api para trazer uma saída específica',
+        response200=CRUDSaidaSerializer
+    )
+    docs_post = documentacao(
+        metodo='post',
+        operation_summary='Create de saída',
+        operation_description='Api para criar uma nova saída',
+        request_body=CRUDSaidaSerializer,
+        response201=CRUDSaidaSerializer,
+
+    )
+    docs_put = documentacao(
+        metodo='put',
+        operation_summary='Put de saída',
+        operation_description='Api para modificiar uma saída',
+        response200=CRUDSaidaSerializer
+    )
+    docs_patch = documentacao(
+        metodo='patch',
+        operation_summary='Patch de saída',
+        operation_description='Api para modificar parcialmente uma saída',
+        response200=CRUDSaidaSerializer
+    )
+    docs_delete = documentacao(
+        metodo='delete',
+        operation_summary='Delete de saída',
+        operation_description='Api para deletar uma saída',
+        response200=CRUDSaidaSerializer
+    )
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        params = self.request.query_params
+        for campo in self.request.query_params:
+            try:
+                valor = params.get(f'{campo}')
+                queryset = queryset.filter(**{campo: valor})
+            except:
+                pass
+
+        return queryset
+
+    @swagger_auto_schema(**docs_list['get'])
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @swagger_auto_schema(**docs_read['get'])
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    @swagger_auto_schema(**docs_patch['patch'])
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+    @swagger_auto_schema(**docs_list['get'])
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @swagger_auto_schema(**docs_delete['delete'])
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
+    @swagger_auto_schema(**docs_post['post'])
     def create(self, request, *args, **kwargs):
         quantidade = int(request.data.get('quantidade'))
         uuid_item = request.data.get('item')
