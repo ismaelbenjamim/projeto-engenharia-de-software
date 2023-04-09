@@ -104,6 +104,7 @@ export default (props = {}) => {
               <NavItem title="Dashboard" link={Routes.DashboardOverview.path} icon={faChartPie} />
               <NavItem title="Estoque Atual" icon={faHandHoldingUsd} link={Routes.ListEstoqueAtual.path} />
               <NavItem title="Entrada" icon={faCog} link={Routes.CreateEstoqueAtual.path} />
+              <NavItem title="Saida" icon={faCog} link={Routes.CreateSaida.path} />
 
               <Dropdown.Divider className="my-3 border-indigo" />
 
