@@ -190,7 +190,7 @@ export const RankingTable = () => {
 };
 
 export const TransactionsTable = () => {
-  const [resultsPerPage] = useState(5);
+  const [resultsPerPage] = useState(10);
   const [resultsTotal, setResultsTotal] = useState(0);
   const [offset, setOffset] = useState(1);
   const [pageCount, setPageCount] = useState(0)
@@ -201,7 +201,7 @@ export const TransactionsTable = () => {
 
   const handlePageClick = (event) => {
     const selectedPage = event.selected;
-    setOffset(selectedPage + 1)
+    setOffset(selectedPage + 1);
   };
 
   const getModal = (item) => {
@@ -213,10 +213,10 @@ export const TransactionsTable = () => {
   useEffect(() => {
     api.get('estoques/estoque/').then((res) => {
       const data = res.data;
-      const slice = data.slice(offset - 1 , offset - 1 + resultsPerPage)
+      const slice = data.slice(offset*resultsPerPage - resultsPerPage, offset*resultsPerPage);
       setResultsTotal(data.length);
       setEstoque_atual(slice);
-      setPageCount(Math.ceil(data.length / resultsPerPage))
+      setPageCount(Math.ceil(data.length / resultsPerPage));
     });
   }, [offset]);
   const TableRow = (props) => {

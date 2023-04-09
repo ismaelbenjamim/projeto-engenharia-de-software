@@ -5,6 +5,7 @@ export const Routes = {
     DashboardOverview: { path: "/dashboard" },
     ListEstoqueAtual: { path: "/estoque-atual" },
     CreateEstoqueAtual: { path: "/estoque-atual/create" },
+    CreateSaida: { path: "/saida/create" },
     Upgrade: { path: "/upgrade" },
     BootstrapTables: { path: "/tables/bootstrap-tables" },
     Billing: { path: "/examples/billing" },
