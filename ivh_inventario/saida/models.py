@@ -12,3 +12,5 @@ class Saida(models.Model):
     quantidade = models.IntegerField("Quantidade", default=1)
     usuario = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    erro_saida = models.BooleanField(default=False)
+    descricao = models.TextField(null=True, blank=True)

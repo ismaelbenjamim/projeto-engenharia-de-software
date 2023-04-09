@@ -59,6 +59,18 @@ class CRUDSaidaViewSet(viewsets.ModelViewSet):
         response200=CRUDSaidaSerializer
     )
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        params = self.request.query_params
+        for campo in self.request.query_params:
+            try:
+                valor = params.get(f'{campo}')
+                queryset = queryset.filter(**{campo: valor})
+            except:
+                pass
+
+        return queryset
+
     @swagger_auto_schema(**docs_list['get'])
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
