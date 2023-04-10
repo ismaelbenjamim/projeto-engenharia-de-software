@@ -1,7 +1,7 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell, faCog, faEnvelopeOpen, faSearch, faSignOutAlt, faUserShield } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faCog, faEnvelopeOpen, faExclamationCircle, faSearch, faSignOutAlt, faUserShield } from "@fortawesome/free-solid-svg-icons";
 import { faUserCircle } from "@fortawesome/free-regular-svg-icons";
 import { Row, Col, Nav, Form, Image, Navbar, Dropdown, Container, ListGroup, InputGroup } from '@themesberg/react-bootstrap';
 
@@ -10,6 +10,7 @@ import Profile3 from "../assets/img/team/profile-picture-3.jpg";
 import { logout } from "../pages/authentication/auth";
 import { useHistory } from "react-router";
 import { usuarioInfo } from "./User";
+import api from "../pages/authentication/api";
 
 
 export default (props) => {
@@ -26,35 +27,43 @@ export default (props) => {
     history.push("/")
   }
 
-  const [notifications, setNotifications] = useState(NOTIFICATIONS_DATA);
+  const [notifications, setNotifications] = useState([{}]);
   const areNotificationsRead = notifications.reduce((acc, notif) => acc && notif.read, true);
+
+  const getNotifications = () => {
+    api.get('usuarios/notificacao/').then((res) => {
+        const data = res.data.slice(0, 5);
+        setNotifications(data);
+    });
+  }
 
   const markNotificationsAsRead = () => {
     setTimeout(() => {
+      getNotifications();
       setNotifications(notifications.map(n => ({ ...n, read: true })));
     }, 300);
   };
 
 
   const Notification = (props) => {
-    const { link, sender, image, time, message, read = false } = props;
+    const { link, titulo, image, time, descricao, read = false } = props;
     const readClassName = read ? "" : "text-danger";
     return (
       <ListGroup.Item action href={link} className="border-bottom border-light">
         <Row className="align-items-center">
           <Col className="col-auto">
-            <Image src={image} className="user-avatar lg-avatar rounded-circle" />
+            <FontAwesomeIcon icon={faExclamationCircle} size={"2x"} className="text-info" />
           </Col>
           <Col className="ps-0 ms--2">
             <div className="d-flex justify-content-between align-items-center">
               <div>
-                <h4 className="h6 mb-0 text-small">{sender}</h4>
+                <h4 className="h6 mb-0 text-small">{titulo}</h4>
               </div>
               <div className="text-end">
                 <small className={readClassName}>{time}</small>
               </div>
             </div>
-            <p className="font-small mt-1 mb-0">{message}</p>
+            <p className="font-small mt-1 mb-0">{descricao}</p>
           </Col>
         </Row>
       </ListGroup.Item>
@@ -86,13 +95,13 @@ export default (props) => {
               <Dropdown.Menu className="dashboard-dropdown notifications-dropdown dropdown-menu-lg dropdown-menu-center mt-2 py-0">
                 <ListGroup className="list-group-flush">
                   <Nav.Link href="#" className="text-center text-primary fw-bold border-bottom border-light py-3">
-                    Notifications
+                    Notificações
                   </Nav.Link>
 
-                  {notifications.map(n => <Notification key={`notification-${n.id}`} {...n} />)}
+                  {notifications.map(n => <Notification key={`notification-${n.uuid}`} {...n} />)}
 
                   <Dropdown.Item className="text-center text-primary fw-bold py-3">
-                    View all
+                    Ver tudo
                   </Dropdown.Item>
                 </ListGroup>
               </Dropdown.Menu>
