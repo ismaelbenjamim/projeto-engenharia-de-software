@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp, faArrowDown, faArrowUp, faEdit, faEllipsisH, faExternalLinkAlt, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { Col, Row, Nav, Card, Image, Button, Table, Dropdown, ProgressBar, Pagination, ButtonGroup, Modal, Form } from '@themesberg/react-bootstrap';
+import { Col, Row, Nav, Card, Image, Button, Table, Dropdown, ProgressBar, Pagination, ButtonGroup, Modal, Form, Badge } from '@themesberg/react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { Routes } from "../routes";
@@ -10,6 +10,7 @@ import { pageVisits, pageTraffic, pageRanking } from "../data/tables";
 import commands from "../data/commands";
 import api from "../pages/authentication/api";
 import ReactPaginate from 'react-paginate';
+import { ModalEntradas } from "./ModalEntradas";
 
 
 const ValueChange = ({ value, suffix }) => {
@@ -213,12 +214,19 @@ export const TransactionsTable = () => {
   useEffect(() => {
     api.get('estoques/estoque/').then((res) => {
       const data = res.data;
-      const slice = data.slice(offset*resultsPerPage - resultsPerPage, offset*resultsPerPage);
+      const slice = data.slice(offset * resultsPerPage - resultsPerPage, offset * resultsPerPage);
       setResultsTotal(data.length);
       setEstoque_atual(slice);
       setPageCount(Math.ceil(data.length / resultsPerPage));
     });
   }, [offset]);
+  const getBemConsumo = (is_bem_de_consumo) => {
+    if (is_bem_de_consumo) {
+      return <Badge bg="success" className="badge-lg">Sim</Badge>
+    } else {
+      return <Badge bg="danger" className="badge-lg">Não</Badge>
+    }
+  }
   const TableRow = (props) => {
     const { uuid, item, estoque_atual } = props;
 
@@ -236,7 +244,7 @@ export const TransactionsTable = () => {
         </td>
         <td>
           <span className="fw-normal">
-            {item.fornecedor}
+            {item.grupo}
           </span>
         </td>
         <td>
@@ -245,9 +253,14 @@ export const TransactionsTable = () => {
           </span>
         </td>
         <td>
-        <Button variant="link" className="text-dark me-2 p-0" onClick={() => getModal(item)}><FontAwesomeIcon icon={faEye} className="" /></Button>
-        <Button variant="link" className="text-dark me-2 p-0"><FontAwesomeIcon icon={faEdit} className="" /></Button>
-        <Button variant="link" className="text-danger me-2 p-0"><FontAwesomeIcon icon={faTrashAlt} className="" /></Button>
+          <span className="fw-normal">
+            {getBemConsumo(item.is_bem_de_consumo)}
+          </span>
+        </td>
+        <td>
+          <Button variant="link" className="text-dark me-2 p-0" onClick={() => getModal(item)}><FontAwesomeIcon icon={faEye} className="" /></Button>
+          <Button variant="link" className="text-dark me-2 p-0"><FontAwesomeIcon icon={faEdit} className="" /></Button>
+          <Button variant="link" className="text-danger me-2 p-0"><FontAwesomeIcon icon={faTrashAlt} className="" /></Button>
         </td>
       </tr>
     );
@@ -261,8 +274,9 @@ export const TransactionsTable = () => {
             <tr>
               <th className="border-bottom">Código</th>
               <th className="border-bottom">Descrição</th>
-              <th className="border-bottom">Fornecedor</th>
+              <th className="border-bottom">Grupo</th>
               <th className="border-bottom">Quantidade</th>
+              <th className="border-bottom">É bem de consumo</th>
               <th className="border-bottom"></th>
             </tr>
           </thead>
@@ -272,66 +286,28 @@ export const TransactionsTable = () => {
         </Table>
         <Card.Footer className="px-3 border-0 d-lg-flex align-items-center justify-content-between">
           <Nav>
-          <ReactPaginate
-            previousLabel={"Anterior"}
-            previousClassName={"page-item"}
-            previousLinkClassName={"page-link"}
-            nextLabel={"Próximo"}
-            nextClassName={"page-item"}
-            nextLinkClassName={"page-link"}
-            breakLabel={"..."}
-            breakClassName={"break-me"}
-            pageCount={pageCount}
-            onPageChange={handlePageClick}
-            containerClassName={"mb-2 mb-lg-0 pagination"}
-            pageLinkClassName={"page-link"}
-            pageClassName={"page-item"}
-            activeClassName={"active"} />
+            <ReactPaginate
+              previousLabel={"Anterior"}
+              previousClassName={"page-item"}
+              previousLinkClassName={"page-link"}
+              nextLabel={"Próximo"}
+              nextClassName={"page-item"}
+              nextLinkClassName={"page-link"}
+              breakLabel={"..."}
+              breakClassName={"break-me"}
+              pageCount={pageCount}
+              onPageChange={handlePageClick}
+              containerClassName={"mb-2 mb-lg-0 pagination"}
+              pageLinkClassName={"page-link"}
+              pageClassName={"page-item"}
+              activeClassName={"active"} />
           </Nav>
           <small className="fw-bold">
             Total de <b>{resultsTotal}</b> itens
           </small>
         </Card.Footer>
       </Card.Body>
-      <Modal as={Modal.Dialog} size={"lg"} centered show={showDefault} onHide={handleClose}>
-          <Modal.Header>
-            <Modal.Title className="h6">{instance_obj.descricao}</Modal.Title>
-            <Button variant="close" aria-label="Close" onClick={handleClose} />
-          </Modal.Header>
-          <Modal.Body>
-          <Row>
-            <Col lg={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Código</Form.Label>
-                <Form.Control type="text" value={instance_obj.cod} disabled />
-              </Form.Group>
-            </Col>
-            <Col lg={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Grupo</Form.Label>
-                <Form.Control type="text" value={instance_obj.grupo} disabled />
-              </Form.Group>
-            </Col>
-            <Col lg={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Validade</Form.Label>
-                <Form.Control type="text" value={instance_obj.validade} disabled />
-              </Form.Group>
-            </Col>
-            <Col lg={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Tipo unitário</Form.Label>
-                <Form.Control type="text" value={instance_obj.tipo_unit} disabled />
-              </Form.Group>
-            </Col>
-          </Row>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="link" className="text-gray ms-auto" onClick={handleClose}>
-              Fechar
-          </Button>
-          </Modal.Footer>
-        </Modal>
+      {ModalEntradas(showDefault, instance_obj, handleClose)}
     </Card>
   );
 };
