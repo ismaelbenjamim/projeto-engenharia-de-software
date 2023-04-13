@@ -37,6 +37,14 @@ export default (props) => {
     });
   }
 
+  const getPhotoUser = (foto) => {
+    if (foto) {
+      return foto;
+    } else {
+      return "https://media.licdn.com/dms/image/D4D03AQG6o-a17tXYEw/profile-displayphoto-shrink_800_800/0/1669590025953?e=2147483647&v=beta&t=EFVY6qvmWgb-cvz4AL7vRLAoy0e1b0zM5cweSjdIcHU";
+    }
+  }
+
   const markNotificationsAsRead = () => {
     setTimeout(() => {
       getNotifications();
@@ -110,7 +118,7 @@ export default (props) => {
             <Dropdown as={Nav.Item}>
               <Dropdown.Toggle as={Nav.Link} className="pt-1 px-0">
                 <div className="media d-flex align-items-center">
-                  <Image src={Profile3} className="user-avatar md-avatar rounded-circle" />
+                  <Image src={getPhotoUser(usuario.foto)} className="user-avatar md-avatar rounded-circle" />
                   <div className="media-body ms-2 text-dark align-items-center d-none d-lg-block">
                     <span className="mb-0 font-small fw-bold">{usuario.first_name} {usuario.last_name}</span>
                   </div>
@@ -120,18 +128,7 @@ export default (props) => {
                 <Dropdown.Item className="fw-bold">
                   <FontAwesomeIcon icon={faUserCircle} className="me-2" /> Meu perfil
                 </Dropdown.Item>
-                <Dropdown.Item className="fw-bold">
-                  <FontAwesomeIcon icon={faCog} className="me-2" /> Configurações
-                </Dropdown.Item>
-                <Dropdown.Item className="fw-bold">
-                  <FontAwesomeIcon icon={faEnvelopeOpen} className="me-2" /> Messages
-                </Dropdown.Item>
-                <Dropdown.Item className="fw-bold">
-                  <FontAwesomeIcon icon={faUserShield} className="me-2" /> Support
-                </Dropdown.Item>
-
                 <Dropdown.Divider />
-
                 <Dropdown.Item className="fw-bold" onClick={userlogout}>
                   <FontAwesomeIcon icon={faSignOutAlt} className="text-danger me-2" /> Sair
                 </Dropdown.Item>

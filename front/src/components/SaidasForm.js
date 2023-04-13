@@ -72,7 +72,7 @@ export const SaidasForm = () => {
               <Form.Group id="grupo">
                 <Form.Label>Item</Form.Label>
                 <Form.Select defaultValue="0" onChange={(e) => setItem(e.target.value)}>
-                  <option value="item 1">Item 1</option>
+                  <option value="1123">(1123) Lata de leite</option>
                 </Form.Select>
               </Form.Group>
             </Col>
