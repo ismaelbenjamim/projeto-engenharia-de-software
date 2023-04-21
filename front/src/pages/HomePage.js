@@ -53,6 +53,7 @@ import { isAuthenticated } from "./authentication/auth";
 import ListEstoqueAtual from './estoque/List';
 import CreateEstoqueAtual from './estoque/Create';
 import CreateSaida from './saida/Create';
+import EditEstoque from './estoque/Edit';
 
 
 const RouteWithLoader = ({ component: Component, ...rest }) => {
@@ -140,6 +141,7 @@ export default () => (
     <RouteWithSidebar exact path={Routes.ListEstoqueAtual.path} component={ListEstoqueAtual} />
     <RouteWithSidebar exact path={Routes.CreateEstoqueAtual.path} component={CreateEstoqueAtual} />
     <RouteWithSidebar exact path={Routes.CreateSaida.path} component={CreateSaida} />
+    <RouteWithSidebar exact path={Routes.EditEstoque.path} component={EditEstoque} />
     <RouteWithSidebar exact path={Routes.BootstrapTables.path} component={BootstrapTables} />
 
     {/* components */}

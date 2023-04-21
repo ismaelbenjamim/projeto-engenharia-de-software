@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp, faArrowDown, faArrowUp, faEdit, faEllipsisH, faExternalLinkAlt, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Nav, Card, Image, Button, Table, Dropdown, ProgressBar, Pagination, ButtonGroup, Modal, Form, Badge } from '@themesberg/react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { Routes } from "../routes";
 import { pageVisits, pageTraffic, pageRanking } from "../data/tables";
@@ -199,6 +199,7 @@ export const TransactionsTable = () => {
   const [instance_obj, setObjectModal] = useState({});
   const [showDefault, setShowDefault] = useState(false);
   const handleClose = () => setShowDefault(false);
+  const hist = useHistory();
 
   const handlePageClick = (event) => {
     const selectedPage = event.selected;
@@ -208,6 +209,10 @@ export const TransactionsTable = () => {
   const getModal = (item) => {
     setObjectModal(item);
     setShowDefault(true);
+  }
+
+  const getPagItem = (item) => {
+    hist.push('/estoque-atual/edit?item=' + item.uuid) 
   }
 
   const [estoque, setEstoque_atual] = useState([]);
@@ -259,7 +264,7 @@ export const TransactionsTable = () => {
         </td>
         <td>
           <Button variant="link" className="text-dark me-2 p-0" onClick={() => getModal(item)}><FontAwesomeIcon icon={faEye} className="" /></Button>
-          <Button variant="link" className="text-dark me-2 p-0"><FontAwesomeIcon icon={faEdit} className="" /></Button>
+          <Button variant="link" className="text-dark me-2 p-0" onClick={() => getPagItem(item)}><FontAwesomeIcon icon={faEdit} className="" /></Button>
           <Button variant="link" className="text-danger me-2 p-0"><FontAwesomeIcon icon={faTrashAlt} className="" /></Button>
         </td>
       </tr>
