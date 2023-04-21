@@ -17,8 +17,10 @@ class CRUDItemViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         for param, value in self.request.query_params.items():
             if hasattr(Item, param):
-                filter_kwargs = {param: value}
+                if param == 'descricao':
+                    filter_kwargs = {f'{param}__icontains': value}
+                else:
+                    filter_kwargs = {param: value}
                 queryset = queryset.filter(**filter_kwargs)
         return queryset
-
 
