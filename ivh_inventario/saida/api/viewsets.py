@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from ivh_inventario.core.utils.organiza_documentacao import documentacao
+from ivh_inventario.core.utils.relatorio_xls import gerar_planilha
 from ivh_inventario.estoque.models import Estoque
 from ivh_inventario.saida.api.serializers import CRUDSaidaSerializer
 from ivh_inventario.saida.models import Saida
@@ -115,3 +116,26 @@ class CRUDSaidaViewSet(viewsets.ModelViewSet):
                 return Response({"msg": "A quantidade tem que ser maior que zero"}, status=status.HTTP_400_BAD_REQUEST)
             return super().create(request, *args, **kwargs)
         return Response({"msg": "o item não está mais presente no estoque atual"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SaidasXLSViewSet(viewsets.ModelViewSet):
+    queryset = Saida.objects.all()
+    serializer_class = CRUDSaidaSerializer
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        queryset = self.queryset
+        data_inicio = self.request.query_params.get('dt_ini')
+        data_fim = self.request.query_params.get('dt_fim')
+
+        if data_inicio and data_fim:
+            queryset = queryset.filter(dt_saida__gte=data_inicio, dt_saida__lte=data_fim)
+
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        usuario = self.request.user
+
+        gerar_planilha(model=self.get_queryset(), dt_ini=self.request.query_params.get('dt_ini'), dt_fim=self.request.query_params.get('dt_fim'), tipo="Saídas", usuario=usuario)
+
+        return Response({'msg': 'e-mail com planilha enviado com sucesso'})

@@ -55,7 +55,7 @@ class UsuarioLoginViewSet(ObtainAuthToken):
 class CRUDUsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = CRUDUsuarioSerializer
-    http_method_names = ['get', 'post', 'put', 'patch', 'delete']
+    http_method_names = ['get', 'put', 'patch', 'delete']
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
@@ -71,13 +71,7 @@ class CRUDUsuarioViewSet(viewsets.ModelViewSet):
         operation_description='API para buscar usuário específico',
         response200=CRUDUsuarioSerializer
     )
-    docs_post = documentacao(
-        metodo='post',
-        operation_summary='Create de usuário',
-        operation_description='API para adicionar um novo usuário',
-        request_body=CRUDUsuarioSerializer,
-        response200=CRUDUsuarioSerializer
-    )
+
     docs_put = documentacao(
         metodo='put',
         operation_summary='Put de usuário',
@@ -121,10 +115,6 @@ class CRUDUsuarioViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(**docs_read['get'])
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
-
-    @swagger_auto_schema(**docs_post['post'])
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
 
     @swagger_auto_schema(**docs_put['put'])
     def update(self, request, *args, **kwargs):
