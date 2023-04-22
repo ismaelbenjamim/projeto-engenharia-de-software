@@ -9,3 +9,6 @@ class Estoque(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid4, primary_key=True, editable=False)
     estoque_atual = models.IntegerField("Estoque atual", default=1)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.item}"

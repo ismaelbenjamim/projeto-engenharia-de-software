@@ -8,7 +8,7 @@ from rest_framework import permissions, routers
 
 from ivh_inventario.entrada.api.viewsets import CRUDEntradaViewSet, EntradasXLSViewSet
 from ivh_inventario.estoque.api.viewsets import CRUDEstoqueViewSet, EstoqueXLSViewSet
-from ivh_inventario.item.api.viewsets import CRUDItemViewSet
+from ivh_inventario.item.api.viewsets import CRUDItemViewSet, ItemGruposAPI
 from ivh_inventario.openapi_config import HttpsSchemaGenerator
 from ivh_inventario.saida.api.viewsets import CRUDSaidaViewSet, SaidasXLSViewSet
 from ivh_inventario.usuario.api.viewsets import UsuarioLoginViewSet, CRUDUsuarioViewSet, UsuarioCadastroViewSet, \
@@ -47,6 +47,7 @@ APIs = [
     path('usuarios/trocar-senha/', TrocarSenhaViewSet.as_view()),
     path('usuarios/esqueci-senha/', EsqueceuSenhaViewSet.as_view()),
     path('usuarios/redefinir-senha/', RedefinirSenhaViewSet.as_view()),
+    path('itens/item-grupos/', ItemGruposAPI.as_view()),
 ]
 
 urlpatterns = [

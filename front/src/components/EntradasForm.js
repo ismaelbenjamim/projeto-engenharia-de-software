@@ -1,9 +1,9 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment-timezone";
 import Datetime from "react-datetime";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarAlt, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Card, Form, Button, InputGroup } from '@themesberg/react-bootstrap';
 import api from "../pages/authentication/api";
 import { getToken } from "../pages/authentication/auth";
@@ -25,12 +25,14 @@ export const EntradasForm = () => {
   const [is_doacao, setIsDoacao] = useState(false);
   const [errors, setError] = useState([]);
 
+  const [itens, setItens] = useState([{}]);
+  const [item_search, setItemSearch] = useState("");
+  const [item, setItem] = useState("");
+  const [showItem, setShowItem] = React.useState(false);
   const history = useHistory();
-
+  
   const postData = () => {
     api.post("entradas/entrada/", {
-      //"dt_entrada": data_entrada,
-     // "quantidade": quantidade,
       "usuario": getToken(),
       "item": {
         "is_bem_de_consumo": is_bem_de_consumo,
@@ -47,9 +49,118 @@ export const EntradasForm = () => {
     }).then(function (response) {
       history.push("/estoque-atual/");
     }).catch(function(errors) {
-      console.log(errors.data)
       setError(errors.data);
     })
+  }
+
+  const getItens = (params="") => {
+    api.get("itens/item/" + params, {
+    }).then(function (response) {
+      setItens(response.data);
+    }).catch(function(errors) {
+      console.log(errors.data)
+    })
+  }
+
+  const handleClick = event => {
+    setShowItem(current => !current);
+  };
+
+  useEffect(() => {
+    if (item_search) {
+      let params = "?descricao=" + item_search;
+      getItens(params);
+    }
+  }, [item_search]);
+
+  const getCheckboxItem = () => {
+    return (
+      <Row>
+        <h5 className="my-4">Cadastro de Item</h5>
+        <Row>
+          <Col sm={6} className="mb-3">
+            <Form.Group id="descricao">
+              <Form.Label>Descrição</Form.Label>
+              <Form.Control required type="text" placeholder="Descrição" onChange={(e) => setDescricao(e.target.value)} />
+            </Form.Group>
+          </Col>
+          <Col md={6} className="mb-3">
+            <Form.Group id="grupo">
+              <Form.Label>Grupo</Form.Label>
+              <Form.Select defaultValue="0" onChange={(e) => setGrupo(e.target.value)}>
+                <option value="equipamento">Equipamento</option>
+                <option value="tipo_2">Tipo 2</option>
+                <option value="tipo_3">Tipo 3</option>
+              </Form.Select>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={6} className="mb-3">
+            <Form.Group id="validade">
+              <Form.Label>Data de validade</Form.Label>
+              <Datetime
+                timeFormat={false}
+                onChange={(e) => setValidade(e.toISOString().substring(0, 10))}
+                renderInput={(props, openCalendar) => (
+                  <InputGroup>
+                    <InputGroup.Text><FontAwesomeIcon icon={faCalendarAlt} /></InputGroup.Text>
+                    <Form.Control
+                      required
+                      type="text"
+                      value={validade ? moment(validade).format("DD/MM/YYYY") : ""}
+                      placeholder="dd/mm/yyyy"
+                      onFocus={openCalendar}
+                      onChange={() => { }} />
+                  </InputGroup>
+                )} />
+            </Form.Group>
+          </Col>
+          <Col sm={6} className="mb-3">
+            <Form.Group id="cod">
+              <Form.Label>Código</Form.Label>
+              <Form.Control required type="text" placeholder="Código" onChange={(e) => setCodigo(e.target.value)} />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={6} className="mb-3">
+            <Form.Group id="fornecedor">
+              <Form.Label>Fornecedor</Form.Label>
+              <Form.Control required type="text" placeholder="Fornecedor" onChange={(e) => setFornecedor(e.target.value)} />
+            </Form.Group>
+          </Col>
+          <Col sm={6}>
+            <Form.Group id="val_total">
+              <Form.Label>Valor total</Form.Label>
+              <Form.Control required type="text" placeholder="Valor total" onChange={(e) => setValorTotal(e.target.value)} />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+        <Col sm={6}>
+          <Form.Group id="val_unit">
+            <Form.Label>Valor Unitário</Form.Label>
+            <Form.Control required type="text" placeholder="Valor unitário" onChange={(e) => setValorUnitario(e.target.value)} />
+          </Form.Group>
+        </Col>
+        <Col sm={6} className="mb-3">
+          <Form.Group id="tipo_unit">
+            <Form.Label>Tipo unitário</Form.Label>
+            <Form.Control required type="text" placeholder="Tipo unitário" onChange={(e) => setTipoUnitario(e.target.value)} />
+          </Form.Group>
+        </Col>
+        </Row>
+        <Row>
+          <Col className="mb-3">
+          <Form.Check label="É bem de consumo?" id="is_bem_de_consumo" htmlFor="is_bem_de_consumo" onChange={(e) => setIsBemConsumo(!is_bem_de_consumo)} />
+          </Col>
+          <Col className="mb-3">
+            <Form.Check label="É doação?" id="is_doacao" htmlFor="is_doacao" onChange={(e) => setIsDoacao(!is_doacao)} />
+          </Col>
+        </Row>
+      </Row>
+    )
   }
 
   return (
@@ -87,88 +198,26 @@ export const EntradasForm = () => {
           </Row>
 
           <h5 className="my-4">Item</h5>
-          <Row>
-            <Col sm={6} className="mb-3">
-              <Form.Group id="descricao">
-                <Form.Label>Descrição</Form.Label>
-                <Form.Control required type="text" placeholder="Descrição" onChange={(e) => setDescricao(e.target.value)} />
-              </Form.Group>
-            </Col>
-            <Col md={6} className="mb-3">
-              <Form.Group id="grupo">
-                <Form.Label>Grupo</Form.Label>
-                <Form.Select defaultValue="0" onChange={(e) => setGrupo(e.target.value)}>
-                  <option value="equipamento">Equipamento</option>
-                  <option value="tipo_2">Tipo 2</option>
-                  <option value="tipo_3">Tipo 3</option>
-                </Form.Select>
+          <Row id="escolher_item">
+            <Col sm={12}>
+              <Form.Group className="mb-3">
+                <Form.Label>Procurar item do estoque</Form.Label>
+                <InputGroup>
+                  <InputGroup.Text><FontAwesomeIcon icon={faSearch} /></InputGroup.Text>
+                  <Form.Control onChange={(e) => setItemSearch(e.target.value)} type="text" placeholder="Buscar" list="lista_itens" />
+                  <datalist id="lista_itens">
+                    {itens.map(i => <option value={"(" + i.cod + ") " + i.descricao}>{i.descricao}</option>)}
+                  </datalist>
+                </InputGroup>
               </Form.Group>
             </Col>
           </Row>
           <Row>
-            <Col md={6} className="mb-3">
-              <Form.Group id="validade">
-                <Form.Label>Data de validade</Form.Label>
-                <Datetime
-                  timeFormat={false}
-                  onChange={(e) => setValidade(e.toISOString().substring(0, 10))}
-                  renderInput={(props, openCalendar) => (
-                    <InputGroup>
-                      <InputGroup.Text><FontAwesomeIcon icon={faCalendarAlt} /></InputGroup.Text>
-                      <Form.Control
-                        required
-                        type="text"
-                        value={validade ? moment(validade).format("DD/MM/YYYY") : ""}
-                        placeholder="dd/mm/yyyy"
-                        onFocus={openCalendar}
-                        onChange={() => { }} />
-                    </InputGroup>
-                  )} />
-              </Form.Group>
-            </Col>
-            <Col sm={6} className="mb-3">
-              <Form.Group id="cod">
-                <Form.Label>Código</Form.Label>
-                <Form.Control required type="text" placeholder="Código" onChange={(e) => setCodigo(e.target.value)} />
-              </Form.Group>
+            <Col md={12} className="mb-3">
+              <Form.Check label="Cadastrar novo item" onClick={handleClick} id="checkbox_item" htmlFor="checkbox_item" />
             </Col>
           </Row>
-          <Row>
-            <Col sm={6} className="mb-3">
-              <Form.Group id="fornecedor">
-                <Form.Label>Fornecedor</Form.Label>
-                <Form.Control required type="text" placeholder="Fornecedor" onChange={(e) => setFornecedor(e.target.value)} />
-              </Form.Group>
-            </Col>
-            <Col sm={6}>
-              <Form.Group id="val_total">
-                <Form.Label>Valor total</Form.Label>
-                <Form.Control required type="text" placeholder="Valor total" onChange={(e) => setValorTotal(e.target.value)} />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-          <Col sm={6}>
-            <Form.Group id="val_unit">
-              <Form.Label>Valor Unitário</Form.Label>
-              <Form.Control required type="text" placeholder="Valor unitário" onChange={(e) => setValorUnitario(e.target.value)} />
-            </Form.Group>
-          </Col>
-          <Col sm={6} className="mb-3">
-            <Form.Group id="tipo_unit">
-              <Form.Label>Tipo unitário</Form.Label>
-              <Form.Control required type="text" placeholder="Tipo unitário" onChange={(e) => setTipoUnitario(e.target.value)} />
-            </Form.Group>
-          </Col>
-          </Row>
-          <Row>
-            <Col className="mb-3">
-              <Form.Check label="É bem de consumo?" id="is_bem_de_consumo" htmlFor="is_bem_de_consumo" onChange={(e) => setIsBemConsumo(!is_bem_de_consumo)} />
-            </Col>
-            <Col className="mb-3">
-              <Form.Check label="É doação?" id="is_doacao" htmlFor="is_doacao" onChange={(e) => setIsDoacao(!is_doacao)} />
-            </Col>
-          </Row>
+          { showItem && getCheckboxItem() }
           <p className="mb-3">{errors}</p>
           <div className="mt-3">
             <Button variant="primary" type="submit">Enviar</Button>
