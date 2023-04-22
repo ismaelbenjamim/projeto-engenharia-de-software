@@ -54,6 +54,9 @@ import ListEstoqueAtual from './estoque/List';
 import CreateEstoqueAtual from './estoque/Create';
 import CreateSaida from './saida/Create';
 import EditEstoque from './estoque/Edit';
+import EditEntrada from './entrada/Edit';
+import EditSaida from './saida/Edit';
+
 
 
 const RouteWithLoader = ({ component: Component, ...rest }) => {
