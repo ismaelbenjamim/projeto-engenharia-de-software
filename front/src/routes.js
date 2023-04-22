@@ -7,6 +7,8 @@ export const Routes = {
     CreateEstoqueAtual: { path: "/estoque-atual/create" },
     CreateSaida: { path: "/saida/create" },
     EditEstoque: { path: "/estoque-atual/edit" },
+    EditEntrada: { path: "/entrada/edit" },
+    EditSaida: { path: "/saida/edit" },
     Upgrade: { path: "/upgrade" },
     BootstrapTables: { path: "/tables/bootstrap-tables" },
     Billing: { path: "/examples/billing" },
