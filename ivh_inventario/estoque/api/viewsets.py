@@ -2,8 +2,11 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from ivh_inventario.core.utils.organiza_documentacao import documentacao
+from ivh_inventario.core.utils.relatorio_xls import gerar_planilha
+from ivh_inventario.entrada.models import Entrada
 from ivh_inventario.estoque.api.serializers import CRUDEstoqueSerializer
 from ivh_inventario.estoque.models import Estoque
 from ivh_inventario.item.models import Item
@@ -91,6 +94,20 @@ class CRUDEstoqueViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(**docs_delete['delete'])
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
+
+
+class EstoqueXLSViewSet(viewsets.ModelViewSet):
+    queryset = Estoque.objects.all()
+    serializer_class = CRUDEstoqueSerializer
+    http_method_names = ['get']
+
+    def list(self, request, *args, **kwargs):
+        usuario = self.request.user
+
+        gerar_planilha(model=self.queryset, tipo="Estoque atual", usuario=usuario)
+
+        return Response({'msg': 'e-mail com planilha enviado com sucesso'})
+
 
 
 

@@ -7,7 +7,9 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from ivh_inventario.core.utils.email import enviar_email_template, enviar_email_xls
 from ivh_inventario.core.utils.organiza_documentacao import documentacao
+from ivh_inventario.core.utils.relatorio_xls import gerar_planilha
 from ivh_inventario.doador.models import Doador
 from ivh_inventario.entrada.api.serializers import CRUDEntradaSerializer, POSTEntradaSerializer, \
     POSTEntradaSerializer_novo_item
@@ -118,8 +120,8 @@ class EntradasXLSViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
-        data_inicio = self.request.query_params.get('data_inicio')
-        data_fim = self.request.query_params.get('data_fim')
+        data_inicio = self.request.query_params.get('dt_ini')
+        data_fim = self.request.query_params.get('dt_fim')
 
         if data_inicio and data_fim:
             queryset = queryset.filter(dt_entrada__gte=data_inicio, dt_entrada__lte=data_fim)
@@ -127,6 +129,8 @@ class EntradasXLSViewSet(viewsets.ModelViewSet):
         return queryset
 
     def list(self, request, *args, **kwargs):
-        campos = [field.name for field in Entrada._meta.fields]
-        queryset_to_xls(self.queryset, 'Entradas', campos)
-        return super().list(request, *args, **kwargs)
+        usuario = self.request.user
+
+        gerar_planilha(model=self.get_queryset(), dt_ini=self.request.query_params.get('dt_ini'), dt_fim=self.request.query_params.get('dt_fim'), tipo="Entradas", usuario=usuario)
+
+        return Response({'msg': 'e-mail com planilha enviado com sucesso'})
