@@ -21,7 +21,7 @@ export const EditForm = () => {
 
   const postData = () => {
     api.put("itens/item/" + item_uuid + '/', {
-      "codigo": codigo,
+      "cod": codigo,
       "descricao": descricao,
       "grupo": grupo,
       "is_bem_de_consumo": is_bem_de_consumo
@@ -74,7 +74,7 @@ export const EditForm = () => {
               </Form.Group>
             </Col>
             <Col md={6} className="mt-5">               
-              <Form.Check defaultValue={is_bem_de_consumo} label="É bem de consumo?" id="is_bem_de_consumo" htmlFor="is_bem_de_consumo" onChange={(e) => setIsBemConsumo(!is_bem_de_consumo)} />             
+              <Form.Check checked={is_bem_de_consumo} label="É bem de consumo?" id="is_bem_de_consumo" htmlFor="is_bem_de_consumo" onChange={(e) => setIsBemConsumo(!is_bem_de_consumo)} />             
             </Col>
           </Row>
           <p className="mb-3">{errors}</p>

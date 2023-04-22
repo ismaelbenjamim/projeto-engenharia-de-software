@@ -19,3 +19,6 @@ class Item(models.Model):
     grupo = models.CharField(max_length=200, choices=GRUPO)
     cod = models.CharField(max_length=50, blank=True, null=True)
     descricao = models.TextField()
+
+    def __str__(self):
+        return f"{self.cod} - {self.descricao}"
