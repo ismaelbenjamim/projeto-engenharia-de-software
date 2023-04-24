@@ -68,7 +68,7 @@ class CRUDSaidaViewSet(viewsets.ModelViewSet):
                 valor = params.get(f'{campo}')
                 queryset = queryset.filter(**{campo: valor})
             except:
-                pass
+                queryset = queryset.none()
 
         return queryset
 

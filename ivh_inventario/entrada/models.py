@@ -21,6 +21,8 @@ class Entrada(models.Model):
     fornecedor = models.CharField(max_length=200, null=True, blank=True)
     tipo_unit = models.CharField(max_length=10, null=True, blank=True)
     doador = models.ForeignKey(Doador, on_delete=models.CASCADE, null=True, blank=True)
+    is_ultimo = models.BooleanField(default=True)
+    entrada_pai = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f"{self.item}"

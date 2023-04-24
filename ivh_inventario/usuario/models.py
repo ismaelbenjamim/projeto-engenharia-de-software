@@ -10,8 +10,6 @@ from ivh_inventario.core.utils.gerador_codigo import geracao_codigo
 class Usuario(AbstractUser):
     CARGO = (
         ("coordenador", "coordenador"),
-        ("auxiliar financeiro", "auxiliar financeiro"),
-        ("auxiliar administrativo", "auxiliar administrativo"),
         ("colaborador", "colaborador")
     )
 

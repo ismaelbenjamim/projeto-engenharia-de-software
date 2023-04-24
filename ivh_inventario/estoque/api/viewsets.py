@@ -66,7 +66,7 @@ class CRUDEstoqueViewSet(viewsets.ModelViewSet):
                 valor = params.get(f'{campo}')
                 queryset = queryset.filter(**{campo: valor})
             except:
-                pass
+                queryset = queryset.none()
 
         return queryset
 
@@ -81,19 +81,31 @@ class CRUDEstoqueViewSet(viewsets.ModelViewSet):
 
     @swagger_auto_schema(**docs_post['post'])
     def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+        if self.request.user.is_superuser:
+            return super().create(request, *args, **kwargs)
+        else:
+            return Response({'msg': 'Usuário precisa ser coordenador para utilizar funcionalidade'})
 
     @swagger_auto_schema(**docs_put['put'])
     def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+        if self.request.user.is_superuser:
+            return super().update(request, *args, **kwargs)
+        else:
+            return Response({'msg': 'Usuário precisa ser coordenador para utilizar funcionalidade'})
 
     @swagger_auto_schema(**docs_patch['patch'])
     def partial_update(self, request, *args, **kwargs):
-        return super().partial_update(request, *args, **kwargs)
+        if self.request.user.is_superuser:
+            return super().partial_update(request, *args, **kwargs)
+        else:
+            return Response({'msg': 'Usuário precisa ser coordenador para utilizar funcionalidade'})
 
     @swagger_auto_schema(**docs_delete['delete'])
     def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
+        if self.request.user.is_superuser:
+            return super().destroy(request, *args, **kwargs)
+        else:
+            return Response({'msg': 'Usuário precisa ser coordenador para utilizar funcionalidade'})
 
 
 class EstoqueXLSViewSet(viewsets.ModelViewSet):
