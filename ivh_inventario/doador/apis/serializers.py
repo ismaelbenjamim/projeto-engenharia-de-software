@@ -8,6 +8,9 @@ class CRUDDoadorSerializer(serializers.ModelSerializer):
         model = Doador
         fields = '__all__'
 
+class EntradaDoador(serializers.Serializer):
+    nome = serializers.CharField()
+    cnpj_cpf = serializers.CharField()
 
 class DoadorSerializer(serializers.Serializer):
     nome = serializers.CharField(required=False, allow_null=True)

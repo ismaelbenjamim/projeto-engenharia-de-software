@@ -1,6 +1,5 @@
 from datetime import date
 
-import xlwt
 from openpyxl import Workbook
 
 from ivh_inventario.core.utils.email import enviar_email_xls
@@ -8,7 +7,12 @@ from ivh_inventario.settings import STATIC_ROOT
 
 
 def gerar_planilha(model, tipo, usuario, dt_ini=None, dt_fim=None):
-    campos = [field.name for field in model.model._meta.get_fields() if field.name !='uuid']
+    campos = [field.name for field in model.model._meta.get_fields()
+              if field.name != 'uuid'
+              if field.name != 'saida'
+              if field.name != 'entrada'
+              if field.name != 'entrada_pai'
+              if field.name != 'saida_pai']
     wb = Workbook()
     ws = wb.active
 
@@ -18,17 +22,26 @@ def gerar_planilha(model, tipo, usuario, dt_ini=None, dt_fim=None):
 
     for i, obj in enumerate(model):
         linha = i + 2
-        for j, campo in enumerate(campos):
-            if campo == "uuid":
-                continue
-            coluna = j + 1
-            valor = getattr(obj, campo)
-            if hasattr(valor, "cnpj_cpf"):
-                valor = valor.cnpj_cpf
-            if hasattr(valor, "descricao"):
-                valor = valor.descricao
-            valor = str(valor)
-            ws.cell(row=linha, column=coluna, value=valor)
+        validador = True
+
+        if hasattr(obj, 'is_utimo'):
+            if obj.is_ultimo == 'True':
+                validador = True
+            else:
+                validador = False
+
+        if validador:
+            for j, campo in enumerate(campos):
+                if campo == "uuid":
+                    continue
+                coluna = j + 1
+                valor = getattr(obj, campo)
+                if hasattr(valor, "cnpj_cpf"):
+                    valor = valor.cnpj_cpf
+                if hasattr(valor, "descricao"):
+                    valor = valor.descricao
+                valor = str(valor)
+                ws.cell(row=linha, column=coluna, value=valor)
 
     wb.save(f'{STATIC_ROOT}/arquivo.xlsx')
 
@@ -48,6 +61,7 @@ def gerar_planilha(model, tipo, usuario, dt_ini=None, dt_fim=None):
             "dt_ini": dt_ini,
             "dt_fim": dt_fim
         })
+
 
 
 
