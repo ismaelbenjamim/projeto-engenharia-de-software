@@ -1,3 +1,4 @@
+from drf_base64.fields import Base64FileField
 from rest_framework import serializers
 
 from ivh_inventario.doador.apis.serializers import CRUDDoadorSerializer, EntradaDoador
@@ -36,7 +37,7 @@ class POSTEntradaSerializer_novo_item(serializers.Serializer):
     usuario = serializers.SlugRelatedField(queryset=Usuario.objects.all(), slug_field="uuid")
     item = ItemSerializer()
     is_doacao = serializers.BooleanField()
-    doc_fisc = serializers.FileField(required=False)
+    doc_fisc = Base64FileField(required=False)
     validade = serializers.DateField(required=False)
     val_unit = serializers.DecimalField(required=False, max_digits=15, decimal_places=2)
     val_total = serializers.DecimalField(required=False, max_digits=15, decimal_places=2)
@@ -46,10 +47,11 @@ class POSTEntradaSerializer_novo_item(serializers.Serializer):
 
     def create(self, validated_data=None):
         data = dict(self.validated_data)
-        doador = dict(data['doador'])
-        filtro_doador = Doador.objects.get_or_create(cnpj_cpf=doador['cnpj_cpf'], nome=doador['nome'])
-
-        data['doador'] = filtro_doador[0]
+        doador = data.get('doador')
+        if doador:
+            doador = dict(doador)
+            filtro_doador = Doador.objects.get_or_create(cnpj_cpf=doador['cnpj_cpf'], nome=doador['nome'])
+            data['doador'] = filtro_doador[0]
 
         item_obj = data['item']
         item = Item.objects.create(**item_obj)
@@ -70,7 +72,7 @@ class POSTEntradaSerializer(serializers.Serializer):
     usuario = serializers.SlugRelatedField(queryset=Usuario.objects.all(), slug_field="uuid")
     item = serializers.SlugRelatedField(queryset=Item.objects.all(), slug_field="uuid")
     is_doacao = serializers.BooleanField()
-    doc_fisc = serializers.FileField(required=False)
+    doc_fisc = Base64FileField(required=False)
     validade = serializers.DateField(required=False)
     val_unit = serializers.DecimalField(required=False, max_digits=15, decimal_places=2)
     val_total = serializers.DecimalField(required=False, max_digits=15, decimal_places=2)
@@ -81,10 +83,11 @@ class POSTEntradaSerializer(serializers.Serializer):
     def create(self, validated_data=None):
         data = dict(self.validated_data)
 
-        doador = dict(data['doador'])
-        filtro_doador = Doador.objects.get_or_create(cnpj_cpf=doador['cnpj_cpf'], nome=doador['nome'])
-
-        data['doador'] = filtro_doador[0]
+        doador = data.get('doador')
+        if doador:
+            doador = dict(doador)
+            filtro_doador = Doador.objects.get_or_create(cnpj_cpf=doador['cnpj_cpf'], nome=doador['nome'])
+            data['doador'] = filtro_doador[0]
         data.pop('is_novo_item')
 
         entrada = Entrada.objects.create(**data)
