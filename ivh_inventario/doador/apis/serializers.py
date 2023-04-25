@@ -2,6 +2,10 @@ from rest_framework import serializers
 
 from ivh_inventario.doador.models import Doador
 
+'''
+    Serializers para as apis doador
+    '''
+
 
 class CRUDDoadorSerializer(serializers.ModelSerializer):
     class Meta:

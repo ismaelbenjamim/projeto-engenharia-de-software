@@ -14,8 +14,12 @@ from ivh_inventario.doador.models import Doador
 from ivh_inventario.entrada.api.serializers import CRUDEntradaSerializer, POSTEntradaSerializer, \
     POSTEntradaSerializer_novo_item, GETEntradaSerializer
 from ivh_inventario.entrada.models import Entrada
-from ivh_inventario.estoque.models import Estoque
 from ivh_inventario.item.models import Item
+
+
+'''
+Viewsets relacionadas ao app de entrada
+'''
 
 
 class CRUDEntradaViewSet(viewsets.ModelViewSet):
@@ -101,10 +105,9 @@ class CRUDEntradaViewSet(viewsets.ModelViewSet):
 
     @swagger_auto_schema(**docs_post['post'])
     def create(self, request, *args, **kwargs):
-        request.data['dt_entrada'] = datetime.date.today()
         request.data['usuario'] = self.request.user.pk
 
-        if request.data['is_novo_item'] is False:
+        if request.data.get('is_novo_item') is False:
             self.serializer_class = POSTEntradaSerializer
         else:
             self.serializer_class = POSTEntradaSerializer_novo_item
