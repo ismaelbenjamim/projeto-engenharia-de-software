@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from ivh_inventario.core.utils.relatorio_xls import gerar_planilha
 from ivh_inventario.item.api.serializers import ItemSerializer
 from ivh_inventario.item.models import Item
 
@@ -34,3 +35,23 @@ class ItemGruposAPI(APIView):
 
     def get(self, request):
         return Response([grupo[0] for grupo in Item.GRUPO], status=status.HTTP_200_OK)
+
+
+class ItemXLSViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        queryset = self.queryset
+        queryset = queryset.filter(estoque_atual__gte=0)
+        return queryset
+
+
+
+    def list(self, request, *args, **kwargs):
+        usuario = self.request.user
+
+        gerar_planilha(model=self.get_queryset(), tipo="estoque_atual", usuario=usuario)
+
+        return Response({'msg': 'e-mail com planilha enviado com sucesso'})
