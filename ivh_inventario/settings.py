@@ -59,7 +59,6 @@ INSTALLED_APPS = [
 
     # Own Apps
     'ivh_inventario.core.apps.CoreConfig',
-    'ivh_inventario.estoque',
     'ivh_inventario.item',
     'ivh_inventario.entrada',
     'ivh_inventario.saida',

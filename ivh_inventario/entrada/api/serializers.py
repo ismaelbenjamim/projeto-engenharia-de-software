@@ -4,11 +4,15 @@ from rest_framework import serializers
 from ivh_inventario.doador.apis.serializers import CRUDDoadorSerializer, EntradaDoador
 from ivh_inventario.doador.models import Doador
 from ivh_inventario.entrada.models import Entrada
-from ivh_inventario.estoque.models import Estoque
 from ivh_inventario.item.api.serializers import ItemSerializer
 from ivh_inventario.item.models import Item
 from ivh_inventario.usuario.api.serializers import CRUDUsuarioSerializer
 from ivh_inventario.usuario.models import Usuario
+
+
+'''
+Serializers relacionados ao app de entrada 
+'''
 
 
 class CRUDEntradaSerializer(serializers.ModelSerializer):
@@ -61,7 +65,8 @@ class POSTEntradaSerializer_novo_item(serializers.Serializer):
         data.pop('is_novo_item')
 
         entrada = Entrada.objects.create(**data)
-        Estoque.objects.create(estoque_atual=data['quantidade'], item=item)
+        item.estoque_atual = entrada.quantidade
+        item.save()
         return CRUDEntradaSerializer(instance=entrada).data
 
 
@@ -91,7 +96,10 @@ class POSTEntradaSerializer(serializers.Serializer):
         data.pop('is_novo_item')
 
         entrada = Entrada.objects.create(**data)
-        item = Item.objects.filter(uuid=data['item'].uuid)
-        Estoque.objects.create(estoque_atual=data['quantidade'], item=item.get())
+        verifica_estoque = Item.objects.filter(uuid=entrada.item.uuid)
+        if verifica_estoque:
+            nova_quantidade = verifica_estoque.get()
+            nova_quantidade.estoque_atual = int(verifica_estoque.get().estoque_atual) + int(data['quantidade'])
+            nova_quantidade.save()
         return CRUDEntradaSerializer(instance=entrada).data
 

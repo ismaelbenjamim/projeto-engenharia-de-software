@@ -1,5 +1,7 @@
+import datetime
 from uuid import uuid4
 
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from ivh_inventario.doador.models import Doador
@@ -9,8 +11,8 @@ from ivh_inventario.usuario.models import Usuario
 
 class Entrada(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid4, primary_key=True, editable=False)
-    dt_entrada = models.DateField("Data de entrada")
-    quantidade = models.IntegerField("Quantidade", default=1)
+    dt_entrada = models.DateField("Data de entrada", default=datetime.date.today())
+    quantidade = models.IntegerField("Quantidade", validators=[MinValueValidator(0)])
     usuario = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True, blank=True)
     doc_fisc = models.FileField(verbose_name="Documento fiscal", blank=True, null=True)

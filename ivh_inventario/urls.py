@@ -7,7 +7,6 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
 from ivh_inventario.entrada.api.viewsets import CRUDEntradaViewSet, EntradasXLSViewSet
-from ivh_inventario.estoque.api.viewsets import CRUDEstoqueViewSet, EstoqueXLSViewSet
 from ivh_inventario.item.api.viewsets import CRUDItemViewSet, ItemGruposAPI
 from ivh_inventario.openapi_config import HttpsSchemaGenerator
 from ivh_inventario.saida.api.viewsets import CRUDSaidaViewSet, SaidasXLSViewSet
@@ -35,8 +34,6 @@ router.register('entradas/entrada', CRUDEntradaViewSet, basename='CRUD de entrad
 router.register('entradas/entrada-xls', EntradasXLSViewSet, basename='entrada xls')
 router.register('saidas/saida', CRUDSaidaViewSet, basename='CRUD de saida')
 router.register('saidas/saida-xls', SaidasXLSViewSet, basename='CRUD de saida')
-router.register('estoques/estoque', CRUDEstoqueViewSet, basename='CRUD de estoque')
-router.register('estoques/estoque-xls', EstoqueXLSViewSet, basename='estoque xls')
 router.register('itens/item', CRUDItemViewSet, basename='CRUD de item')
 router.register('usuarios/usuario', CRUDUsuarioViewSet, basename='CRUD de usuário')
 router.register('usuarios/cadastro', UsuarioCadastroViewSet, basename='cadastro do usuário')

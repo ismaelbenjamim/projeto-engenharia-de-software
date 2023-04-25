@@ -5,6 +5,10 @@ from rest_framework.permissions import IsAuthenticated
 from ivh_inventario.doador.apis.serializers import CRUDDoadorSerializer
 from ivh_inventario.doador.models import Doador
 
+'''
+    Criacao das viewsets do model de Doador
+    '''
+
 
 class CRUDDoadorViewSet(viewsets.ModelViewSet):
     queryset = Doador.objects.all()
