@@ -31,6 +31,11 @@ class CRUDUsuarioSerializer(serializers.ModelSerializer):
         model = Usuario
         fields = '__all__'
 
+class UsuarioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Usuario
+        fields = ['username', 'cargo', 'email']
+
 
 class TrocarSenhaSerializer(serializers.Serializer):
     senha_nova = serializers.CharField(required=True)

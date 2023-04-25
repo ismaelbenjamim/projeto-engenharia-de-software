@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from ivh_inventario.core.utils.organiza_documentacao import documentacao
 from ivh_inventario.core.utils.relatorio_xls import gerar_planilha
 from ivh_inventario.item.models import Item
-from ivh_inventario.saida.api.serializers import CRUDSaidaSerializer
+from ivh_inventario.saida.api.serializers import CRUDSaidaSerializer, GETSaidaSerializer
 from ivh_inventario.saida.models import Saida
 
 
@@ -68,12 +68,13 @@ class CRUDSaidaViewSet(viewsets.ModelViewSet):
                 valor = params.get(f'{campo}')
                 queryset = queryset.filter(**{campo: valor})
             except:
-                queryset = queryset.none()
+                queryset = self.queryset
 
         return queryset
 
     @swagger_auto_schema(**docs_list['get'])
     def list(self, request, *args, **kwargs):
+        self.serializer_class = GETSaidaSerializer
         return super().list(request, *args, **kwargs)
 
     @swagger_auto_schema(**docs_read['get'])

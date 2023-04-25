@@ -11,7 +11,7 @@ from ivh_inventario.usuario.models import Usuario
 
 class Entrada(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid4, primary_key=True, editable=False)
-    dt_entrada = models.DateField("Data de entrada", default=datetime.date.today())
+    dt_entrada = models.DateField("Data de entrada", default=datetime.date.today(), null=True, blank=True)
     quantidade = models.IntegerField("Quantidade", validators=[MinValueValidator(0)])
     usuario = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True, blank=True)
