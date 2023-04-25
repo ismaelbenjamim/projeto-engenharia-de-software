@@ -22,6 +22,7 @@ class CRUDEntradaSerializer(serializers.ModelSerializer):
 
 class GETEntradaSerializer(serializers.ModelSerializer):
     usuario = serializers.SerializerMethodField()
+    item = ItemSerializer()
 
     class Meta:
         model = Entrada
