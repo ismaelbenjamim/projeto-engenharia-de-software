@@ -27,6 +27,26 @@ class CRUDItemViewSet(viewsets.ModelViewSet):
                 queryset = queryset.filter(**filter_kwargs)
         return queryset
 
+    def create(self, request, *args, **kwargs):
+        if self.request.user.is_superuser:
+            return super().create(request, *args, **kwargs)
+        return Response({"msg": "você precisa ser coodernador para utilizar essa funcionalidade"})
+
+    def partial_update(self, request, *args, **kwargs):
+        if self.request.user.is_superuser:
+            return super().partial_update(request, *args, **kwargs)
+        return Response({"msg": "você precisa ser coodernador para utilizar essa funcionalidade"})
+
+    def update(self, request, *args, **kwargs):
+        if self.request.user.is_superuser:
+            return super().update(request, *args, **kwargs)
+        return Response({"msg": "você precisa ser coodernador para utilizar essa funcionalidade"})
+
+    def destroy(self, request, *args, **kwargs):
+        if self.request.user.is_superuser:
+            return super().destroy(request, *args, **kwargs)
+        return Response({"msg": "você precisa ser coodernador para utilizar essa funcionalidade"})
+
 
 class ItemGruposAPI(APIView):
     http_method_names = ['get']
@@ -46,8 +66,6 @@ class ItemXLSViewSet(viewsets.ModelViewSet):
         queryset = self.queryset
         queryset = queryset.filter(estoque_atual__gte=0)
         return queryset
-
-
 
     def list(self, request, *args, **kwargs):
         usuario = self.request.user
