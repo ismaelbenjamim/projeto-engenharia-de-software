@@ -79,6 +79,7 @@ class CRUDSaidaViewSet(viewsets.ModelViewSet):
 
     @swagger_auto_schema(**docs_read['get'])
     def retrieve(self, request, *args, **kwargs):
+        self.serializer_class = GETSaidaSerializer
         return super().retrieve(request, *args, **kwargs)
 
     @swagger_auto_schema(**docs_patch['patch'])
