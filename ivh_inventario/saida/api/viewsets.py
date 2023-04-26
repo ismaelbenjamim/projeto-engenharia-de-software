@@ -137,3 +137,45 @@ class SaidasXLSViewSet(viewsets.ModelViewSet):
         gerar_planilha(model=self.get_queryset(), dt_ini=self.request.query_params.get('dt_ini'), dt_fim=self.request.query_params.get('dt_fim'), tipo="Saídas", usuario=usuario)
 
         return Response({'msg': 'e-mail com planilha enviado com sucesso'})
+
+
+class SaidaUpdateViewSet(viewsets.ModelViewSet):
+    queryset = Saida.objects.all()
+    serializer_class = CRUDSaidaSerializer
+    http_method_names = ['post']
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def create(self, request, *args, **kwargs):
+        filtro_saida = Saida.objects.filter(uuid=self.request.data.get('saida_pai'))
+        if filtro_saida:
+            filtro_saida = filtro_saida.get()
+            if filtro_saida.is_ultimo is False:
+                return Response({"msg": "Você não pode alterar essa saída"}, status=status.HTTP_400_BAD_REQUEST)
+
+            campos = [field.name for field in Saida._meta.get_fields() if field.name != 'saida_pai' if
+                      field.name != 'is_ultimo' if field.name != 'saida']
+
+            filtro_saida.is_ultimo = False
+            filtro_saida.save()
+
+            self.request.data['saida_pai'] = filtro_saida.uuid
+
+            for campo in campos:
+                if not self.request.data.get(f'{campo}'):
+                    if campo == 'item':
+                        uuid = filtro_saida.__getattribute__(campo).uuid
+                        self.request.data[f'{campo}'] = uuid
+                    elif campo == 'usuario':
+                        uuid = filtro_saida.__getattribute__(campo).uuid
+                        self.request.data[f'{campo}'] = uuid
+                    else:
+                        self.request.data[f'{campo}'] = filtro_saida.__getattribute__(campo)
+
+            return super().create(request, *args, **kwargs)
+        else:
+            return Response({"msg": "Não existe essa saída"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+

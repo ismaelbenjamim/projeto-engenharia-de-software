@@ -12,6 +12,7 @@ class CRUDSaidaSerializer(serializers.ModelSerializer):
 
 
 
+
 class GETSaidaSerializer(serializers.ModelSerializer):
     usuario = UsuarioSerializer()
     item = ItemSerializer()

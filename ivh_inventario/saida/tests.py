@@ -1,7 +1,6 @@
 
 import pytest
 
-from ivh_inventario.estoque.models import Estoque
 from ivh_inventario.item.models import Item
 from ivh_inventario.settings import SITE_DOMINIO
 from ivh_inventario.usuario.models import Usuario
@@ -14,6 +13,16 @@ class TestesEntrada:
     def gerar_token(self):
         usuario = Usuario(
             username='usuario_teste'
+        )
+        usuario.save()
+        Token.objects.get_or_create(user=usuario)
+        token_user = Token.objects.get(user=usuario)
+        return str(token_user)
+
+    def gerar_token_super(self):
+        usuario = Usuario(
+            username='usuario_teste',
+            is_superuser=True
         )
         usuario.save()
         Token.objects.get_or_create(user=usuario)
@@ -57,14 +66,9 @@ class TestesEntrada:
             grupo="limpeza",
             cod="UM",
             descricao="TESTE",
+            estoque_atual=1
         )
         item.save()
-
-        estoque = Estoque.objects.create(
-            estoque_atual=1,
-            item=item
-        )
-        estoque.save()
 
         response = client.post(
             path=f'{SITE_DOMINIO}/api/saidas/saida/',
@@ -87,21 +91,14 @@ class TestesEntrada:
     def test_post_saida_fracasso(self, client):
         token = self.gerar_token()
 
-
-
         item = Item.objects.create(
             is_bem_de_consumo=True,
             grupo="limpeza",
             cod="UM",
             descricao="TESTE",
+            estoque_atual=1
         )
         item.save()
-
-        estoque = Estoque.objects.create(
-            estoque_atual=1,
-            item=item
-        )
-        estoque.save()
 
         response = client.post(
             path=f'{SITE_DOMINIO}/api/saidas/saida/',
@@ -121,7 +118,6 @@ class TestesEntrada:
         print(response.json())
         assert response.status_code == 400
 
-
     def test_get_saida_xls(self, client):
         token = self.gerar_token()
 
@@ -134,3 +130,4 @@ class TestesEntrada:
         print('\n' + str(response.status_code))
         print(response.json())
         assert response.status_code == 200
+

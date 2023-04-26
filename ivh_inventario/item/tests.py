@@ -42,3 +42,4 @@ class TestesEntrada:
         print('\n' + str(response.status_code))
         print(response.json())
         assert response.status_code == 200
+

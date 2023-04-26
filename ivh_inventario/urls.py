@@ -6,10 +6,10 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
-from ivh_inventario.entrada.api.viewsets import CRUDEntradaViewSet, EntradasXLSViewSet
+from ivh_inventario.entrada.api.viewsets import CRUDEntradaViewSet, EntradasXLSViewSet, EntradaUpdateViewSet
 from ivh_inventario.item.api.viewsets import CRUDItemViewSet, ItemGruposAPI, ItemXLSViewSet
 from ivh_inventario.openapi_config import HttpsSchemaGenerator
-from ivh_inventario.saida.api.viewsets import CRUDSaidaViewSet, SaidasXLSViewSet
+from ivh_inventario.saida.api.viewsets import CRUDSaidaViewSet, SaidasXLSViewSet, SaidaUpdateViewSet
 from ivh_inventario.usuario.api.viewsets import UsuarioLoginViewSet, CRUDUsuarioViewSet, UsuarioCadastroViewSet, \
     TrocarSenhaViewSet, EsqueceuSenhaViewSet, RedefinirSenhaViewSet, UsuarioNotificacaoViewSet
 
@@ -32,8 +32,10 @@ router = routers.DefaultRouter()
 
 router.register('entradas/entrada', CRUDEntradaViewSet, basename='CRUD de entrada')
 router.register('entradas/entrada-xls', EntradasXLSViewSet, basename='entrada xls')
+router.register('entradas/entrada-update', EntradaUpdateViewSet, basename='entrada upadate')
 router.register('saidas/saida', CRUDSaidaViewSet, basename='CRUD de saida')
-router.register('saidas/saida-xls', SaidasXLSViewSet, basename='CRUD de saida')
+router.register('saidas/saida-xls', SaidasXLSViewSet, basename='saida xls')
+router.register('saidas/saida-update', SaidaUpdateViewSet, basename='saida update')
 router.register('itens/item', CRUDItemViewSet, basename='CRUD de item')
 router.register('itens/item-xls', ItemXLSViewSet, basename='CRUD de item')
 router.register('usuarios/usuario', CRUDUsuarioViewSet, basename='CRUD de usuário')

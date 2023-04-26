@@ -20,6 +20,13 @@ class CRUDEntradaSerializer(serializers.ModelSerializer):
         model = Entrada
         fields = '__all__'
 
+
+class EntradaUpdateSerializer(serializers.ModelSerializer):
+    doc_fisc = Base64FileField(required=False)
+    class Meta:
+        model = Entrada
+        fields = '__all__'
+
 class GETEntradaSerializer(serializers.ModelSerializer):
     usuario = serializers.SerializerMethodField()
     item = ItemSerializer()
@@ -37,7 +44,7 @@ class GETEntradaSerializer(serializers.ModelSerializer):
 
 class POSTEntradaSerializer_novo_item(serializers.Serializer):
     is_novo_item = serializers.BooleanField()
-    dt_entrada = serializers.DateField("Data de entrada")
+    dt_entrada = serializers.DateField("Data de entrada", required=False)
     quantidade = serializers.IntegerField(default=1)
     usuario = serializers.SlugRelatedField(queryset=Usuario.objects.all(), slug_field="uuid")
     item = ItemSerializer()
@@ -73,7 +80,7 @@ class POSTEntradaSerializer_novo_item(serializers.Serializer):
 
 class POSTEntradaSerializer(serializers.Serializer):
     is_novo_item = serializers.BooleanField()
-    dt_entrada = serializers.DateField("Data de entrada")
+    dt_entrada = serializers.DateField("Data de entrada", required=False)
     quantidade = serializers.IntegerField(default=1)
     usuario = serializers.SlugRelatedField(queryset=Usuario.objects.all(), slug_field="uuid")
     item = serializers.SlugRelatedField(queryset=Item.objects.all(), slug_field="uuid")
@@ -100,7 +107,7 @@ class POSTEntradaSerializer(serializers.Serializer):
         verifica_estoque = Item.objects.filter(uuid=entrada.item.uuid)
         if verifica_estoque:
             nova_quantidade = verifica_estoque.get()
-            nova_quantidade.estoque_atual = int(verifica_estoque.get().estoque_atual) + int(data['quantidade'])
+            nova_quantidade.estoque_atual = nova_quantidade.estoque_atual + int(data['quantidade'])
             nova_quantidade.save()
         return CRUDEntradaSerializer(instance=entrada).data
 

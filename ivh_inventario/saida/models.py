@@ -18,3 +18,4 @@ class Saida(models.Model):
     descricao = models.TextField(null=True, blank=True)
     is_ultimo = models.BooleanField(default=True)
     saida_pai = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+
