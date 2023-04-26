@@ -16,7 +16,7 @@ class Entrada(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True, blank=True)
     doc_fisc = models.FileField(verbose_name="Documento fiscal", blank=True, null=True)
-    is_doacao = models.BooleanField()
+    is_doacao = models.BooleanField(default=True)
     validade = models.DateField(blank=True, null=True)
     val_unit = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
     val_total = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)

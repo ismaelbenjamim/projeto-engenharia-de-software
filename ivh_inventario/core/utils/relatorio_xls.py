@@ -12,7 +12,9 @@ def gerar_planilha(model, tipo, usuario, dt_ini=None, dt_fim=None):
               if field.name != 'saida'
               if field.name != 'entrada'
               if field.name != 'entrada_pai'
-              if field.name != 'saida_pai']
+              if field.name != 'saida_pai'
+              if field.name != 'doc_fisc'
+              if field.name != 'is_ultimo']
     wb = Workbook()
     ws = wb.active
 
@@ -22,26 +24,18 @@ def gerar_planilha(model, tipo, usuario, dt_ini=None, dt_fim=None):
 
     for i, obj in enumerate(model):
         linha = i + 2
-        validador = True
 
-        if hasattr(obj, 'is_utimo'):
-            if obj.is_ultimo == 'True':
-                validador = True
-            else:
-                validador = False
-
-        if validador:
-            for j, campo in enumerate(campos):
-                if campo == "uuid":
-                    continue
-                coluna = j + 1
-                valor = getattr(obj, campo)
-                if hasattr(valor, "cnpj_cpf"):
-                    valor = valor.cnpj_cpf
-                if hasattr(valor, "descricao"):
-                    valor = valor.descricao
-                valor = str(valor)
-                ws.cell(row=linha, column=coluna, value=valor)
+        for j, campo in enumerate(campos):
+            if campo == "uuid":
+                continue
+            coluna = j + 1
+            valor = getattr(obj, campo)
+            if hasattr(valor, "cnpj_cpf"):
+                valor = valor.cnpj_cpf
+            if hasattr(valor, "descricao"):
+                valor = valor.descricao
+            valor = str(valor)
+            ws.cell(row=linha, column=coluna, value=valor)
 
     wb.save(f'{STATIC_ROOT}/arquivo.xlsx')
 

@@ -222,4 +222,4 @@ CORS_ORIGIN_ALLOW_ALL = True
 #    'http://localhost:3000'
 #]
 
-
+LANGUAGE_CODE = "pt-BR"
