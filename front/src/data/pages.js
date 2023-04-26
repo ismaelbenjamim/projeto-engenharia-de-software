@@ -30,7 +30,7 @@ export default [
         "id": 3,
         "name": "Entrada",
         "image": SettingsImg,
-        "link": Routes.CreateEstoqueAtual.path
+        "link": Routes.CreateEntrada.path
     },
     {
         "id": 4,

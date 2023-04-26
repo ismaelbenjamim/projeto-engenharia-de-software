@@ -51,11 +51,16 @@ import Toasts from "./components/Toasts";
 
 import { isAuthenticated } from "./authentication/auth";
 import ListEstoqueAtual from './estoque/List';
-import CreateEstoqueAtual from './estoque/Create';
+import ListEntrada from './entrada/List';
+import ListSaida from './saida/List';
+import CreateEntrada from './entrada/Create';
 import CreateSaida from './saida/Create';
 import EditEstoque from './estoque/Edit';
 import EditEntrada from './entrada/Edit';
 import EditSaida from './saida/Edit';
+import { ListUsuario } from './usuario/List';
+import { CreateUsuario } from './usuario/Create';
+import { EditUsuario } from './usuario/Edit';
 
 
 
@@ -140,9 +145,13 @@ export default () => (
 
     {/* pages */}
     <RouteWithSidebar exact path={Routes.DashboardOverview.path} component={DashboardOverview} />
-    <RouteWithSidebar exact path={Routes.Upgrade.path} component={Upgrade} />
+    <RouteWithSidebar exact path={Routes.ListUsuario.path} component={ListUsuario} />
+    <RouteWithSidebar exact path={Routes.CreateUsuario.path} component={CreateUsuario} />
+    <RouteWithSidebar exact path={Routes.EditUsuario.path} component={EditUsuario} />
     <RouteWithSidebar exact path={Routes.ListEstoqueAtual.path} component={ListEstoqueAtual} />
-    <RouteWithSidebar exact path={Routes.CreateEstoqueAtual.path} component={CreateEstoqueAtual} />
+    <RouteWithSidebar exact path={Routes.ListEntrada.path} component={ListEntrada} />
+    <RouteWithSidebar exact path={Routes.ListSaida.path} component={ListSaida} />
+    <RouteWithSidebar exact path={Routes.CreateEntrada.path} component={CreateEntrada} />
     <RouteWithSidebar exact path={Routes.CreateSaida.path} component={CreateSaida} />
     <RouteWithSidebar exact path={Routes.EditEstoque.path} component={EditEstoque} />
     <RouteWithSidebar exact path={Routes.BootstrapTables.path} component={BootstrapTables} />

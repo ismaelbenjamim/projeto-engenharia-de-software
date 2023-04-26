@@ -1,6 +1,6 @@
 import api from "../pages/authentication/api";
 
-const consumo = api.get('estoques/estoque/').then((res) => {
+const consumo = api.get('itens/item/').then((res) => {
     return res;
 });
 
