@@ -3,7 +3,7 @@ import { faCheck, faCog, faHome, faSearch } from '@fortawesome/free-solid-svg-ic
 import { Col, Row, Form, Button, ButtonGroup, Breadcrumb, InputGroup, Dropdown } from '@themesberg/react-bootstrap';
 import { TransactionsTable } from "../../components/Tables";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { EstoqueAtualTable } from "../../components/EstoqueAtualTable";
+import { EstoqueAtualTable } from "../../components/estoque/EstoqueAtualTable";
 
 export default () => {
   return (

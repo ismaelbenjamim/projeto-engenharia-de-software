@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBoxOpen, faCartArrowDown, faChartPie, faChevronDown, faClipboard, faCommentDots, faFileAlt, faPlus, faRocket, faStore } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Button, Dropdown } from '@themesberg/react-bootstrap';
-import { EditSaida } from "../../components/EditSaida";
+import { SaidaEdit } from "../../components/saida/SaidaEdit";
 
 
 export default () => {
@@ -13,7 +13,7 @@ export default () => {
       
       <Row>
         <Col xs={12} xl={12}>
-          <EditForm />
+          <SaidaEdit />
         </Col>
       </Row>
     </>

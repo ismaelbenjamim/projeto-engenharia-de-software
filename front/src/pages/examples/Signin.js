@@ -22,7 +22,7 @@ export default () => {
       "username": username,
       "password": password,
     },).then(function (response) {
-      login(response.data.token);
+      login(response.data.token, response.data.uuid);
       history.push("/dashboard");
     }).catch(function (error) {
       console.log(error);
