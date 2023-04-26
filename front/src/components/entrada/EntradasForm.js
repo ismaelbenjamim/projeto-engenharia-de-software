@@ -145,7 +145,6 @@ export const EntradasForm = () => {
           document.getElementById("buscar_item").classList.add('is-valid');
           document.getElementById("buscar_item").classList.remove('is-invalid');
         } else {
-          setItem("");
           document.getElementById("buscar_item").classList.add('is-invalid');
           document.getElementById("buscar_item").classList.remove('is-valid');
         }
@@ -250,7 +249,7 @@ export const EntradasForm = () => {
             <Col md={6} className="mb-3">
               <Form.Group id="quantidade">
                 <Form.Label>Quantidade</Form.Label>
-                <Form.Control required type="number" placeholder="Quantidade" onChange={(e) => setQuantidade(e.target.value)} />
+                <Form.Control required type="number" min={0} placeholder="Quantidade" onChange={(e) => setQuantidade(e.target.value)} />
               </Form.Group>
             </Col>
             <Col md={6} className="mb-3">
