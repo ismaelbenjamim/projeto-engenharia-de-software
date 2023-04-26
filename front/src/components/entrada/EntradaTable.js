@@ -231,11 +231,11 @@ export const EntradaTable = () => {
           <Table responsive className="table-centered table-nowrap rounded mb-0">
             <thead className="thead-light">
               <tr>
+                <th className="border-bottom">Descrição</th>
                 <th className="border-bottom">Data de entrada</th>
                 <th className="border-bottom">Usuário</th>
                 <th className="border-bottom">Quantidade</th>
                 <th className="border-bottom">É doação?</th>
-                <th className="border-bottom">Validade</th>
                 <th className="border-bottom"></th>
               </tr>
             </thead>
