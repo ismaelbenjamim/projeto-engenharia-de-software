@@ -59,17 +59,8 @@ export const EntradasForm = () => {
   }
 
   const postData = () => {
-    if (showItem == true) {
-      setItem({
-        "is_bem_de_consumo": is_bem_de_consumo,
-        "grupo": grupo,
-        "cod": codigo,
-        "descricao": descricao
-      });
-    }
     var data = {
       "is_novo_item": showItem,
-      "item": item,
       "quantidade": quantidade,
       "usuario": getToken(),
       "is_doacao": is_doacao,
@@ -77,6 +68,16 @@ export const EntradasForm = () => {
       "val_total": valor_total,
       "fornecedor": fornecedor,
       "tipo_unit": tipo_unitario
+    }
+    if (showItem == true) {
+      data['item'] = {
+        "is_bem_de_consumo": is_bem_de_consumo,
+        "grupo": grupo,
+        "cod": codigo,
+        "descricao": descricao
+      }
+    } else {
+      data['item'] = item
     }
     if (validade) {
       data["validade"] = moment(validade).format('YYYY-MM-DD');;
