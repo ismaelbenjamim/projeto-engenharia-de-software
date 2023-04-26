@@ -85,6 +85,18 @@ class CRUDEntradaViewSet(viewsets.ModelViewSet):
 
     @swagger_auto_schema(**docs_delete['delete'])
     def destroy(self, request, *args, **kwargs):
+        filtro = Entrada.objects.filter(uuid=kwargs.get('pk'))
+        if filtro:
+            filtro = filtro.get()
+            if filtro.is_ultimo:
+                item = Item.objects.get(uuid=filtro.item.uuid)
+                item.estoque_atual -= filtro.quantidade
+                if item.estoque_atual < 0:
+                    item.estoque_atual = 0
+                item.save()
+                return super().destroy(request, *args, **kwargs)
+            else: 
+                return Response({'msg': "item não é o último"}, status=status.HTTP_400_BAD_REQUEST)
         return super().destroy(request, *args, **kwargs)
 
     @swagger_auto_schema(**docs_patch['patch'])
@@ -164,6 +176,12 @@ class EntradaUpdateViewSet(viewsets.ModelViewSet):
             filtro_saida.save()
 
             self.request.data['entrada_pai'] = filtro_saida.uuid
+
+            quantidade = self.request.data.get('quantidade')
+            if quantidade:
+                item_busca = Item.objects.get(uuid=filtro_saida.item.uuid)
+                item_busca.estoque_atual = item_busca.estoque_atual - filtro_saida.quantidade + quantidade
+                item_busca.save()
 
             for campo in campos:
                 if not self.request.data.get(f'{campo}'):
