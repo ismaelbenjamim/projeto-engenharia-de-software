@@ -104,12 +104,12 @@ export default (props = {}) => {
               <NavItem title="Dashboard" link={Routes.DashboardOverview.path} icon={faChartPie} />
               <NavItem title="Estoque Atual" icon={faBox} link={Routes.ListEstoqueAtual.path} />
 
-              <CollapsableNavItem eventKey="entradas/" title="Entradas" icon={faSignInAlt}>
+              <CollapsableNavItem eventKey="entrada/" title="Entradas" icon={faSignInAlt}>
                 <NavItem title="Listar" link={Routes.ListEntrada.path} />
                 <NavItem title="Adicionar" link={Routes.CreateEntrada.path} />
               </CollapsableNavItem>
 
-              <CollapsableNavItem eventKey="saidas/" title="Saidas" icon={faSignOutAlt}>
+              <CollapsableNavItem eventKey="saida/" title="Saidas" icon={faSignOutAlt}>
                 <NavItem title="Listar" link={Routes.ListSaida.path} />
                 <NavItem title="Adicionar" link={Routes.CreateSaida.path} />
               </CollapsableNavItem>

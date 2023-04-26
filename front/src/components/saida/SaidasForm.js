@@ -5,8 +5,8 @@ import Datetime from "react-datetime";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Card, Form, Button, InputGroup, Modal } from '@themesberg/react-bootstrap';
-import api from "../pages/authentication/api";
-import { getToken } from "../pages/authentication/auth";
+import api from "../../pages/authentication/api";
+import { getToken } from "../../pages/authentication/auth";
 import { useHistory } from "react-router-dom";
 
 
@@ -57,6 +57,9 @@ export const SaidasForm = () => {
     api.post("saidas/saida/", data
     ).then(function (response) {
       var element = document.getElementById("saida_form");
+      setLimiteItem(null);
+      document.getElementById("buscar_item").classList.remove('is-valid');
+      document.getElementById("buscar_item").classList.remove('is-valid');
       element.reset();
       setShowDefault(true);
     }).catch(function(errors) {
@@ -148,7 +151,9 @@ export const SaidasForm = () => {
               <Form.Check label="Saida com problema?" id="erro_saida" htmlFor="erro_saida" onChange={(e) => setErroSaida(!erro_saida)} />
             </Col>
           </Row>
-          <p className="mb-3">{errors}</p>
+          <Row>
+            <p className="mb-3">{errors ? Object.entries(errors).map(([key, value]) => (<li key={key}>{value}</li>)) : null}</p>
+          </Row>
           <div className="mt-3">
             <Button variant="primary" type="submit">Enviar</Button>
           </div>

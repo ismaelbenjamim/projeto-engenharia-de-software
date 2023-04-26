@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell, faCog, faEnvelopeOpen, faExclamationCircle, faSearch, faSignOutAlt, faUserShield } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faCog, faEnvelopeOpen, faExclamationCircle, faSearch, faSignOutAlt, faUnlockAlt, faUserShield } from "@fortawesome/free-solid-svg-icons";
 import { faUserCircle } from "@fortawesome/free-regular-svg-icons";
 import { Row, Col, Nav, Form, Image, Navbar, Dropdown, Container, ListGroup, InputGroup } from '@themesberg/react-bootstrap';
 
@@ -25,6 +25,12 @@ export default (props) => {
   const userlogout = () => {
     logout();
     history.push("/")
+  }
+  const userPerfil = () => {
+    history.push("/perfil/")
+  }
+  const userChangePassword = () => {
+    history.push("/perfil/change-password/")
   }
 
   const [notifications, setNotifications] = useState([{}]);
@@ -125,8 +131,11 @@ export default (props) => {
                 </div>
               </Dropdown.Toggle>
               <Dropdown.Menu className="user-dropdown dropdown-menu-right mt-2">
-                <Dropdown.Item className="fw-bold">
+                <Dropdown.Item className="fw-bold" onClick={userPerfil}>
                   <FontAwesomeIcon icon={faUserCircle} className="me-2" /> Meu perfil
+                </Dropdown.Item>
+                <Dropdown.Item className="fw-bold" onClick={userChangePassword}>
+                  <FontAwesomeIcon icon={faUnlockAlt} className="me-2" /> Alterar senha
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item className="fw-bold" onClick={userlogout}>
