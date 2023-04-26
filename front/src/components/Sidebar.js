@@ -56,7 +56,6 @@ export default (props = {}) => {
         <Nav.Link {...linkProps} target={target} className={classNames}>
           <span>
             {icon ? <span className="sidebar-icon"><FontAwesomeIcon icon={icon} /> </span> : null}
-            {image ? <Image src={Logo} width={50} height={50} className="sidebar-icon svg-icon" /> : null}
 
             <span className="sidebar-text">{title}</span>
           </span>
@@ -101,7 +100,7 @@ export default (props = {}) => {
               <NavItem title="IVH Inventário" link="#" image={ReactHero} />
 
               <Dropdown.Divider className="my-3 border-indigo" />
-              
+
               <NavItem title="Estoque Atual" icon={faBox} link={Routes.ListEstoqueAtual.path} />
 
               <CollapsableNavItem eventKey="entrada/" title="Entradas" icon={faSignInAlt}>
