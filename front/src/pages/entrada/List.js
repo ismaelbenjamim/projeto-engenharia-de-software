@@ -1,7 +1,7 @@
 import React from "react";
 import { faCheck, faCog, faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Form, Button, ButtonGroup, Breadcrumb, InputGroup, Dropdown } from '@themesberg/react-bootstrap';
-import { EntradaTable } from "../../components/EntradaTable";
+import { EntradaTable } from "../../components/entrada/EntradaTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default () => {

@@ -15,7 +15,7 @@ from ivh_inventario.saida.models import Saida
 
 
 class CRUDSaidaViewSet(viewsets.ModelViewSet):
-    queryset = Saida.objects.all()
+    queryset = Saida.objects.all().filter(is_ultimo=True).order_by('-dt_saida')
     serializer_class = CRUDSaidaSerializer
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
     permission_classes = [IsAuthenticated]

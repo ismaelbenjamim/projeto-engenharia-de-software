@@ -56,11 +56,13 @@ import ListSaida from './saida/List';
 import CreateEntrada from './entrada/Create';
 import CreateSaida from './saida/Create';
 import EditEstoque from './estoque/Edit';
-import EditEntrada from './entrada/Edit';
-import EditSaida from './saida/Edit';
+import EntradaEdit from './entrada/Edit';
+import SaidaEdit from './saida/Edit';
 import { ListUsuario } from './usuario/List';
 import { CreateUsuario } from './usuario/Create';
 import { EditUsuario } from './usuario/Edit';
+import { Perfil } from './usuario/Perfil';
+import { UsuarioAlterarSenha } from '../components/usuario/UsuarioAlterarSenha';
 
 
 
@@ -148,12 +150,16 @@ export default () => (
     <RouteWithSidebar exact path={Routes.ListUsuario.path} component={ListUsuario} />
     <RouteWithSidebar exact path={Routes.CreateUsuario.path} component={CreateUsuario} />
     <RouteWithSidebar exact path={Routes.EditUsuario.path} component={EditUsuario} />
+    <RouteWithSidebar exact path={Routes.UsuarioPerfil.path} component={Perfil} />
+    <RouteWithSidebar exact path={Routes.UsuarioAlterarSenha.path} component={UsuarioAlterarSenha} />
     <RouteWithSidebar exact path={Routes.ListEstoqueAtual.path} component={ListEstoqueAtual} />
-    <RouteWithSidebar exact path={Routes.ListEntrada.path} component={ListEntrada} />
-    <RouteWithSidebar exact path={Routes.ListSaida.path} component={ListSaida} />
-    <RouteWithSidebar exact path={Routes.CreateEntrada.path} component={CreateEntrada} />
-    <RouteWithSidebar exact path={Routes.CreateSaida.path} component={CreateSaida} />
     <RouteWithSidebar exact path={Routes.EditEstoque.path} component={EditEstoque} />
+    <RouteWithSidebar exact path={Routes.ListEntrada.path} component={ListEntrada} />
+    <RouteWithSidebar exact path={Routes.CreateEntrada.path} component={CreateEntrada} />
+    <RouteWithSidebar exact path={Routes.EntradaEdit.path} component={EntradaEdit} />
+    <RouteWithSidebar exact path={Routes.ListSaida.path} component={ListSaida} />
+    <RouteWithSidebar exact path={Routes.CreateSaida.path} component={CreateSaida} />
+    <RouteWithSidebar exact path={Routes.SaidaEdit.path} component={SaidaEdit} />
     <RouteWithSidebar exact path={Routes.BootstrapTables.path} component={BootstrapTables} />
 
     {/* components */}

@@ -20,7 +20,7 @@ export const EditForm = () => {
   const history = useHistory();
 
   const postData = () => {
-    api.put("itens/item/" + item_uuid + '/', {
+    api.put("itens/item/" + obj_uuid + '/', {
       "cod": codigo,
       "descricao": descricao,
       "grupo": grupo,
@@ -32,9 +32,9 @@ export const EditForm = () => {
     })
   }
   const queryParameters = new URLSearchParams(window.location.search)
-  const item_uuid = queryParameters.get("item")
+  const obj_uuid = queryParameters.get("uuid")
   useEffect(() => {
-    api.get("itens/item/" + item_uuid + "/" , {
+    api.get("itens/item/" + obj_uuid + "/" , {
     }).then(function (response) {
         const data = response.data;
         setCodigo(data.cod);
@@ -76,7 +76,7 @@ export const EditForm = () => {
             </Col>
           </Row>
           <Row>
-            <p className="mb-3">{Object.entries(errors).map(([key, value]) => (<li key={key}>{value}</li>))}</p>
+            <p className="mb-3">{errors ? Object.entries(errors).map(([key, value]) => (<li key={key}>{value}</li>)) : null}</p>
           </Row>
           <p className="mb-3">{success}</p>
           <div className="mt-3">

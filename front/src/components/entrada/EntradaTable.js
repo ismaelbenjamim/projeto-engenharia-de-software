@@ -2,13 +2,23 @@ import { Badge, Button, Card, Col, Form, Modal, Nav, Row, Table } from "@themesb
 import React from "react";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
-import api from "../pages/authentication/api";
-import { Link } from "react-router-dom";
-import { Routes } from "../routes";
+import api from "../../pages/authentication/api";
+import { Link, useHistory } from "react-router-dom";
+import { Routes } from "../../routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 export const EntradaTable = () => {
+    const hist = useHistory();
+    const getPageEdit = (uuid) => {
+      hist.push('/entrada/edit?uuid=' + uuid);
+    }
+
+    const ObjectListReload = () => {
+      setReload(true);
+    }
+    const [reload, setReload] = useState(false);
+
     const [resultsPerPage] = useState(10);
     const [resultsTotal, setResultsTotal] = useState(0);
     const [offset, setOffset] = useState(1);
@@ -21,16 +31,21 @@ export const EntradaTable = () => {
     const [showDefault, setShowDefault] = useState(false);
     const [instance_obj, setInstanceObject] = useState({});
     const handleClose = () => setShowDefault(false);
-    const setModal = (uuid) => {
+    const [showDelete, setShowDelete] = useState(false);
+    const CloseDelete = () => setShowDelete(false);
+    const setModal = (uuid, modal_detail) => {
       api.get('entradas/entrada/' + uuid + '/').then((res) => {
         const data = res.data;
-        console.log(data);
         setInstanceObject(data);
-        setShowDefault(true);
+        if (modal_detail) {
+          setShowDefault(true);
+        } else {
+          setShowDelete(true);
+        }
       });
     }
 
-    const EntradasDetail = (instance_obj) => {
+    const ObjectDetail = (instance_obj) => {
       return(
         <Form onSubmit={(e) => { e.preventDefault(); }}>
           <Row>
@@ -51,7 +66,7 @@ export const EntradaTable = () => {
             <Col sm={6} className="mb-3">
               <Form.Group id="doc_fisc">
                 <Form.Label>Descrição</Form.Label>
-                <Form.Control disabled type="text" value={instance_obj.item ? instance_obj.item : ""} />
+                <Form.Control disabled type="text" value={instance_obj.item ? instance_obj.item.descricao : ""} />
               </Form.Group>
             </Col>
             <Col sm={6}>
@@ -109,10 +124,44 @@ export const EntradaTable = () => {
             <Button variant="close" aria-label="Close" onClick={handleClose} />
           </Modal.Header>
           <Modal.Body>
-            {EntradasDetail(instance_obj)}
+            {ObjectDetail(instance_obj)}
           </Modal.Body>
           <Modal.Footer>
             <Button variant="link" className="text-gray ms-auto" onClick={handleClose}>
+              Fechar
+          </Button>
+          </Modal.Footer>
+        </Modal>
+      )
+    }
+
+    const ObjectDelete = (instance_obj) => {
+      const callDelete = () => {
+        api.delete('entradas/entrada/' + instance_obj.uuid).then((res) => {
+          ObjectListReload();
+          CloseDelete();
+        });
+      }
+      return(
+        <Form onSubmit={(e) => { callDelete(); e.preventDefault(); }}>
+          <h4>Você tem certeza que deseja deletar a entrada: <br/>{instance_obj.uuid}?</h4>
+          <Button variant="danger" className="mt-3" type="submit">Deletar entrada</Button>
+        </Form>
+      )
+    }
+
+    const getModalDelete = () => {
+      return (
+        <Modal as={Modal.Dialog} size="lg" centered show={showDelete} onHide={CloseDelete}>
+          <Modal.Header>
+            <Modal.Title className="h6">Deletar Entrada</Modal.Title>
+            <Button variant="close" aria-label="Close" onClick={CloseDelete} />
+          </Modal.Header>
+          <Modal.Body className="text-center">
+            {ObjectDelete(instance_obj)}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="link" className="text-gray ms-auto" onClick={CloseDelete}>
               Fechar
           </Button>
           </Modal.Footer>
@@ -130,7 +179,7 @@ export const EntradaTable = () => {
         setEstoque_atual(slice);
         setPageCount(Math.ceil(data.length / resultsPerPage));
       });
-    }, [offset]);
+    }, [offset, reload]);
     const getValidator = (is_bem_de_consumo) => {
       if (is_bem_de_consumo) {
         return <Badge bg="success" className="badge-lg">Sim</Badge>
@@ -168,9 +217,9 @@ export const EntradaTable = () => {
             </span>
           </td>
           <td>
-            <Button variant="link" className="text-dark me-2 p-0" onClick={() => setModal(uuid)}><FontAwesomeIcon icon={faEye} className="" /></Button>
-            <Button variant="link" className="text-dark me-2 p-0"><FontAwesomeIcon icon={faEdit} className="" /></Button>
-            <Button variant="link" className="text-danger me-2 p-0"><FontAwesomeIcon icon={faTrashAlt} className="" /></Button>
+            <Button variant="link" className="text-dark me-2 p-0" onClick={() => setModal(uuid, true)}><FontAwesomeIcon icon={faEye} className="" /></Button>
+            <Button variant="link" className="text-dark me-2 p-0" onClick={() => getPageEdit(uuid)}><FontAwesomeIcon icon={faEdit} className="" /></Button>
+            <Button variant="link" className="text-danger me-2 p-0" onClick={() => setModal(uuid, false)}><FontAwesomeIcon icon={faTrashAlt} className="" /></Button>
           </td>
         </tr>
       );
@@ -193,6 +242,7 @@ export const EntradaTable = () => {
             <tbody>
               {estoque.map(t => <TableRow key={`transaction-${t.uuid}`} {...t} />)}
               {getModal()}
+              {getModalDelete()}
             </tbody>
           </Table>
           <Card.Footer className="px-3 border-0 d-lg-flex align-items-center justify-content-between">

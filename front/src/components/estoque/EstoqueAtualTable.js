@@ -2,9 +2,9 @@ import { Badge, Button, Card, Col, Form, Modal, Nav, Row, Table } from "@themesb
 import React from "react";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
-import api from "../pages/authentication/api";
+import api from "../../pages/authentication/api";
 import { Link, useHistory } from "react-router-dom";
-import { Routes } from "../routes";
+import { Routes } from "../../routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment-timezone";
@@ -20,14 +20,25 @@ export const EstoqueAtualTable = () => {
       setOffset(selectedPage + 1);
     };
 
+    const ObjectListReload = () => {
+      setReload(true);
+    }
+    const [reload, setReload] = useState(false);
+
     const [showDefault, setShowDefault] = useState(false);
     const [instance_obj, setInstanceObject] = useState({});
     const handleClose = () => setShowDefault(false);
-    const setModal = (uuid) => {
+    const [showDelete, setShowDelete] = useState(false);
+    const CloseDelete = () => setShowDelete(false);
+    const setModal = (uuid, modal_detail) => {
       api.get('itens/item/' + uuid + '/').then((res) => {
         const data = res.data;
         setInstanceObject(data);
-        setShowDefault(true);
+        if (modal_detail) {
+          setShowDefault(true);
+        } else {
+          setShowDelete(true);
+        }
       });
     }
 
@@ -82,7 +93,6 @@ export const EstoqueAtualTable = () => {
             </tr>
         );
       };
-
       return(
       <>
         <Table responsive className="table-centered table-nowrap rounded mb-0">
@@ -148,6 +158,40 @@ export const EstoqueAtualTable = () => {
       )
     }
     
+    const ObjectDelete = (instance_obj) => {
+      const callDelete = () => {
+        api.delete('itens/item/' + instance_obj.uuid).then((res) => {
+          ObjectListReload();
+          CloseDelete();
+        });
+      }
+      return(
+        <Form onSubmit={(e) => { callDelete(); e.preventDefault(); }}>
+          <h4>Você tem certeza que deseja deletar o item: <br/>{instance_obj.uuid}?</h4>
+          <Button variant="danger" className="mt-3" type="submit">Deletar item</Button>
+        </Form>
+      )
+    }
+
+    const getModalDelete = () => {
+      return (
+        <Modal as={Modal.Dialog} size="lg" centered show={showDelete} onHide={CloseDelete}>
+          <Modal.Header>
+            <Modal.Title className="h6">Deletar Item</Modal.Title>
+            <Button variant="close" aria-label="Close" onClick={CloseDelete} />
+          </Modal.Header>
+          <Modal.Body className="text-center">
+            {ObjectDelete(instance_obj)}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="link" className="text-gray ms-auto" onClick={CloseDelete}>
+              Fechar
+          </Button>
+          </Modal.Footer>
+        </Modal>
+      )
+    }
+
     const [estoque, setEstoque_atual] = useState([]);
     useEffect(() => {
       api.get('itens/item/').then((res) => {
@@ -157,7 +201,7 @@ export const EstoqueAtualTable = () => {
         setEstoque_atual(slice);
         setPageCount(Math.ceil(data.length / resultsPerPage));
       });
-    }, [offset]);
+    }, [offset, reload]);
     const getValidator = (validator) => {
       if (validator) {
         return <Badge bg="success" className="badge-lg">Sim</Badge>
@@ -195,16 +239,16 @@ export const EstoqueAtualTable = () => {
             </span>
           </td>
           <td>
-            <Button variant="link" className="text-dark me-2 p-0" onClick={() => setModal(uuid)}><FontAwesomeIcon icon={faEye} className="" /></Button>
-            <Button variant="link" className="text-dark me-2 p-0" onClick={() => getPagItem(uuid)}><FontAwesomeIcon icon={faEdit} className="" /></Button>
-            <Button variant="link" className="text-danger me-2 p-0"><FontAwesomeIcon icon={faTrashAlt} className="" /></Button>
+            <Button variant="link" className="text-dark me-2 p-0" onClick={() => setModal(uuid, true)}><FontAwesomeIcon icon={faEye} className="" /></Button>
+            <Button variant="link" className="text-dark me-2 p-0" onClick={() => getPageEdit(uuid)}><FontAwesomeIcon icon={faEdit} className="" /></Button>
+            <Button variant="link" className="text-danger me-2 p-0" onClick={() => setModal(uuid, false)}><FontAwesomeIcon icon={faTrashAlt} className="" /></Button>
           </td>
         </tr>
       );
     };
 
-    const getPagItem = (uuid) => {
-      hist.push('/estoque-atual/edit?item=' + uuid);
+    const getPageEdit = (uuid) => {
+      hist.push('/estoque-atual/edit?uuid=' + uuid);
     }
   
     return (
@@ -224,6 +268,7 @@ export const EstoqueAtualTable = () => {
             <tbody>
               {estoque.map(t => <TableRow key={`transaction-${t.uuid}`} {...t} />)}
               {getModal()}
+              {getModalDelete()}
             </tbody>
           </Table>
           <Card.Footer className="px-3 border-0 d-lg-flex align-items-center justify-content-between">

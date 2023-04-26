@@ -211,8 +211,8 @@ export const TransactionsTable = () => {
     setShowDefault(true);
   }
 
-  const getPagItem = (uuid) => {
-    hist.push('/estoque-atual/edit?item=' + uuid) 
+  const getPageEdit = (uuid) => {
+    hist.push('/estoque-atual/edit?uuid=' + uuid) 
   }
 
   const [estoque, setEstoque_atual] = useState([]);
@@ -264,7 +264,7 @@ export const TransactionsTable = () => {
         </td>
         <td>
           <Button variant="link" className="text-dark me-2 p-0" onClick={() => getModal(uuid)}><FontAwesomeIcon icon={faEye} className="" /></Button>
-          <Button variant="link" className="text-dark me-2 p-0" onClick={() => getPagItem(uuid)}><FontAwesomeIcon icon={faEdit} className="" /></Button>
+          <Button variant="link" className="text-dark me-2 p-0" onClick={() => getPageEdit(uuid)}><FontAwesomeIcon icon={faEdit} className="" /></Button>
           <Button variant="link" className="text-danger me-2 p-0"><FontAwesomeIcon icon={faTrashAlt} className="" /></Button>
         </td>
       </tr>

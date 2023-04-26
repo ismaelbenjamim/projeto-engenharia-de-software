@@ -23,7 +23,7 @@ Viewsets relacionadas ao app de entrada
 
 
 class CRUDEntradaViewSet(viewsets.ModelViewSet):
-    queryset = Entrada.objects.all()
+    queryset = Entrada.objects.all().filter(is_ultimo=True).order_by('-dt_entrada')
     serializer_class = CRUDEntradaSerializer
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
     permission_classes = [IsAuthenticated]

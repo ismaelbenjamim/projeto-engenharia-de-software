@@ -5,12 +5,12 @@ import Datetime from "react-datetime";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Card, Form, Button, InputGroup, Modal } from '@themesberg/react-bootstrap';
-import api from "../pages/authentication/api";
-import { getToken } from "../pages/authentication/auth";
+import api from "../../pages/authentication/api";
+import { getToken } from "../../pages/authentication/auth";
 import { useHistory } from "react-router-dom";
 
 
-export const UsuarioForm = () => {
+export const EntradasForm = () => {
   const [quantidade, setQuantidade] = useState("");
   const [descricao, setDescricao] = useState("");
   const [grupo, setGrupo] = useState("equipamento");
@@ -154,17 +154,96 @@ export const UsuarioForm = () => {
     getGruposItem();
   }, [item_search]);
 
+  const getCheckboxItem = () => {
+    return (
+      <Row>
+        <h5 className="my-4">Cadastro de Item</h5>
+        <Row>
+          <Col sm={6} className="mb-3">
+            <Form.Group id="descricao">
+              <Form.Label>Descrição</Form.Label>
+              <Form.Control required type="text" placeholder="Descrição" onChange={(e) => setDescricao(e.target.value)} />
+            </Form.Group>
+          </Col>
+          <Col sm={6} className="mb-3">
+              <Form.Group id="cod">
+                <Form.Label>Código</Form.Label>
+                <Form.Control required type="text" placeholder="Código" onChange={(e) => setCodigo(e.target.value)} />
+              </Form.Group>
+            </Col>
+        </Row>
+        <Row>
+          <Col md={6} className="mb-3">
+            <Form.Group id="grupo">
+              <Form.Label>Grupo</Form.Label>
+              <Form.Select defaultValue="0" onChange={(e) => setGrupo(e.target.value)}>
+              {grupos_item ? grupos_item.map(i => <option key={i} value={i}>{i}</option>) : null}
+              </Form.Select>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={6} className="mb-3">
+              <Form.Check label="É bem de consumo?" id="is_bem_de_consumo" htmlFor="is_bem_de_consumo" onChange={(e) => setIsBemConsumo(!is_bem_de_consumo)} />
+          </Col>
+        </Row>
+      </Row>
+    )
+  }
+
+  const getSearchItem = () => {
+    return (
+    <Row>
+      <Col sm={12}>
+        <Form.Group className="mb-3">
+          <Form.Label>Procurar item no estoque</Form.Label>
+            <Form.Control id="buscar_item" onChange={(e) => setItemSearch(e.target.value)} type="text" placeholder="Buscar" list="lista_itens" />
+            <datalist id="lista_itens">
+              {itens ? itens.map(i => <option key={i.cod} value={i.descricao}>{i.descricao}</option>) : null}
+            </datalist>
+        </Form.Group>
+      </Col>
+    </Row>
+    )
+  }
+
+  const getDoador = () => {
+    return (
+    <Card>
+      <Card.Body>
+        <Row>
+          <h5 className="mb-3">Doador</h5>
+          <Col sm={6} className="mb-3">
+            <Form.Group id="nome_doador">
+              <Form.Label>Nome</Form.Label>
+              <Form.Control type="text" placeholder="Nome do doador" onChange={(e) => setDoadorNome(e.target.value)} />
+            </Form.Group>
+          </Col>
+          <Col sm={6} className="mb-3">
+            <Form.Group id="tipo_unit">
+              <Form.Label>CPF/CNPJ</Form.Label>
+              <Form.Control type="text" placeholder="CPF ou CNPJ do doador" onChange={(e) => setDoadorCPF(e.target.value)} />
+            </Form.Group>
+          </Col>
+        </Row>
+      </Card.Body>
+    </Card>
+    );
+  }
+
   return (
     <Card border="light" className="bg-white shadow-sm mb-4">
       <Card.Body>
-        <h5 className="mb-4">Criação de Usuário</h5>
-        <Form id="form" method="post" onSubmit={(e) => { postData(); e.preventDefault(); }}>
+        <h5 className="mb-4">Escolha do Item</h5>
+        <Form id="entrada_form" method="post" onSubmit={(e) => { postData(); e.preventDefault(); }}>
+          { show_search_item && getSearchItem() }
           <Row>
             <Col md={12} className="mb-3">
               <p>Não encontrou o item?</p>
               <Form.Check label="Cadastrar novo item" onClick={handleClick} id="checkbox_item" htmlFor="checkbox_item" />
             </Col>
           </Row>
+          { showItem && getCheckboxItem() }
           <hr></hr>
           <h5 className="mb-4 mt-4">Criação de Entrada</h5>
           <Row>
@@ -234,7 +313,9 @@ export const UsuarioForm = () => {
             </Col>
           </Row>
           { is_doacao && getDoador() }
-          <p className="mb-3">{errors}</p>
+          <Row>
+            <p className="mb-3">{errors ? Object.entries(errors).map(([key, value]) => (<li key={key}>{value}</li>)) : null}</p>
+          </Row>
           <div className="mt-3">
             <Button variant="primary" type="submit">Enviar</Button>
           </div>

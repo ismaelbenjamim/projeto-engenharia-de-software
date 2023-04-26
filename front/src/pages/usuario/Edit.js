@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBoxOpen, faCartArrowDown, faChartPie, faChevronDown, faClipboard, faCommentDots, faFileAlt, faPlus, faRocket, faStore } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Button, Dropdown } from '@themesberg/react-bootstrap';
-import { EditEntrada } from "../../components/EditEntrada";
+import { UsuarioEdit } from "../../components/usuario/UsuarioEdit";
 
 
 export const EditUsuario = () => {
@@ -13,7 +13,7 @@ export const EditUsuario = () => {
       
       <Row>
         <Col xs={12} xl={12}>
-          <EditForm />
+          <UsuarioEdit />
         </Col>
       </Row>
     </>
