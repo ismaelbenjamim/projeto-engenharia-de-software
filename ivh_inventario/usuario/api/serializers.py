@@ -22,8 +22,11 @@ class UsuarioCadastroSerializer(serializers.ModelSerializer):
             'username',
             'email',
             'password',
-            'cargo'
+            'cargo',
+            'first_name',
+            'last_name'
         ]
+
 
 
 class CRUDUsuarioSerializer(serializers.ModelSerializer):
