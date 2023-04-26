@@ -10,7 +10,7 @@ import { faEdit, faEye, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 export const SaidaTable = () => {
     const hist = useHistory();
-    const getPageEdit = (uuid) => {
+    const getPagItem = (uuid) => {
       hist.push('/saida/edit?uuid=' + uuid);
     }
     const ObjectListReload = () => {
@@ -202,7 +202,7 @@ export const SaidaTable = () => {
           </td>
           <td>
             <Button variant="link" className="text-dark me-2 p-0" onClick={() => setModal(uuid, true)}><FontAwesomeIcon icon={faEye} className="" /></Button>
-            <Button variant="link" className="text-dark me-2 p-0" onClick={() => getPageEdit(uuid)}><FontAwesomeIcon icon={faEdit} className="" /></Button>
+            <Button variant="link" className="text-dark me-2 p-0" onClick={() => getPagItem(uuid)}><FontAwesomeIcon icon={faEdit} className="" /></Button>
             <Button variant="link" className="text-danger me-2 p-0" onClick={() => setModal(uuid, false)}><FontAwesomeIcon icon={faTrashAlt} className="" /></Button>
           </td>
         </tr>
@@ -220,7 +220,6 @@ export const SaidaTable = () => {
                 <th className="border-bottom">Usuário</th>
                 <th className="border-bottom">Quantidade</th>
                 <th className="border-bottom">É doação?</th>
-                <th className="border-bottom">Validade</th>
                 <th className="border-bottom"></th>
               </tr>
             </thead>
