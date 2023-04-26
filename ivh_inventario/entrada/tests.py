@@ -106,7 +106,7 @@ class TestesEntrada:
                 "tipo_unit": "teste",
                 "doador": {
                     "nome": "teste",
-                    "cnpj_cpf": "11111111111",
+                    "cnpj_cpf": "11111111111"
                 }
             }
         )

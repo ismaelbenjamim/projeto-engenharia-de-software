@@ -12,7 +12,7 @@ from ivh_inventario.core.utils.organiza_documentacao import documentacao
 from ivh_inventario.core.utils.relatorio_xls import gerar_planilha
 from ivh_inventario.doador.models import Doador
 from ivh_inventario.entrada.api.serializers import CRUDEntradaSerializer, POSTEntradaSerializer, \
-    POSTEntradaSerializer_novo_item, GETEntradaSerializer
+    POSTEntradaSerializer_novo_item, GETEntradaSerializer, EntradaUpdateSerializer
 from ivh_inventario.entrada.models import Entrada
 from ivh_inventario.item.models import Item
 
@@ -33,14 +33,14 @@ class CRUDEntradaViewSet(viewsets.ModelViewSet):
         metodo='get',
         operation_summary='List de entradas',
         operation_description='API para listar todas as entradas',
-        response200=CRUDEntradaSerializer
+        response200=GETEntradaSerializer
 
     )
     docs_read = documentacao(
         metodo='get',
         operation_summary='Read de entradas',
         operation_description='API para ler apenas uma entrada',
-        response200=CRUDEntradaSerializer
+        response200=GETEntradaSerializer
     )
     docs_post = documentacao(
         metodo='post',
@@ -101,6 +101,7 @@ class CRUDEntradaViewSet(viewsets.ModelViewSet):
 
     @swagger_auto_schema(**docs_read['get'])
     def retrieve(self, request, *args, **kwargs):
+        self.serializer_class = GETEntradaSerializer
         return super().retrieve(request, *args, **kwargs)
 
     @swagger_auto_schema(**docs_post['post'])
@@ -138,3 +139,50 @@ class EntradasXLSViewSet(viewsets.ModelViewSet):
         gerar_planilha(model=self.get_queryset(), dt_ini=self.request.query_params.get('dt_ini'), dt_fim=self.request.query_params.get('dt_fim'), tipo="Entradas", usuario=usuario)
 
         return Response({'msg': 'e-mail com planilha enviado com sucesso'})
+
+
+class EntradaUpdateViewSet(viewsets.ModelViewSet):
+    queryset = Entrada.objects.all()
+    serializer_class = EntradaUpdateSerializer
+    http_method_names = ['post']
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def create(self, request, *args, **kwargs):
+        filtro_saida = Entrada.objects.filter(uuid=self.request.data.get('entrada_pai'))
+        if filtro_saida:
+            filtro_saida = filtro_saida.get()
+            if filtro_saida.is_ultimo is False:
+                return Response({"msg": "Você não pode alterar essa entrada"}, status=status.HTTP_400_BAD_REQUEST)
+
+            campos = [field.name for field in Entrada._meta.get_fields() if field.name != 'entrada_pai' if
+                      field.name != 'is_ultimo' if field.name != 'entrada']
+
+            filtro_saida.is_ultimo = False
+            filtro_saida.save()
+
+            self.request.data['entrada_pai'] = filtro_saida.uuid
+
+            for campo in campos:
+                if not self.request.data.get(f'{campo}'):
+                    if campo == 'item':
+                        uuid = filtro_saida.__getattribute__(campo).uuid
+                        self.request.data[f'{campo}'] = uuid
+                    elif campo == 'usuario':
+                        uuid = filtro_saida.__getattribute__(campo).uuid
+                        self.request.data[f'{campo}'] = uuid
+                    elif campo == 'doc_fisc':
+                        doc_fisc = filtro_saida.__getattribute__(campo)
+                        if doc_fisc:
+                            self.request.data[f'{campo}'] = filtro_saida.__getattribute__(campo)
+                    elif campo == 'doador':
+                        if filtro_saida.doador:
+                            uuid = filtro_saida.__getattribute__(campo).uuid
+                            self.request.data[f'{campo}'] = uuid
+                    else:
+                        self.request.data[f'{campo}'] = filtro_saida.__getattribute__(campo)
+
+            return super().create(request, *args, **kwargs)
+        else:
+            return Response({"msg": "Não existe essa entrada"}, status=status.HTTP_400_BAD_REQUEST)
+
