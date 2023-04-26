@@ -131,6 +131,8 @@ class EntradasXLSViewSet(viewsets.ModelViewSet):
         if data_inicio and data_fim:
             queryset = queryset.filter(dt_entrada__gte=data_inicio, dt_entrada__lte=data_fim)
 
+        queryset = queryset.filter(is_ultimo=True)
+
         return queryset
 
     def list(self, request, *args, **kwargs):

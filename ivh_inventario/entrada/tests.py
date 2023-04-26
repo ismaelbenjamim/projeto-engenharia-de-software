@@ -1,6 +1,7 @@
 
 import pytest
 
+from ivh_inventario.entrada.models import Entrada
 from ivh_inventario.item.models import Item
 from ivh_inventario.settings import SITE_DOMINIO
 from ivh_inventario.usuario.models import Usuario
@@ -164,9 +165,6 @@ class TestesEntrada:
         print('\n' + str(response.status_code))
         print(response.json())
         assert response.status_code == 400
-
-
-
 
 
 

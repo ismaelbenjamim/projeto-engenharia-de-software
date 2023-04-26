@@ -129,6 +129,7 @@ class SaidasXLSViewSet(viewsets.ModelViewSet):
 
         if data_inicio and data_fim:
             queryset = queryset.filter(dt_saida__gte=data_inicio, dt_saida__lte=data_fim)
+        queryset = queryset.filter(is_ultimo=True)
 
         return queryset
 

@@ -131,3 +131,25 @@ class TestesEntrada:
         print(response.json())
         assert response.status_code == 200
 
+
+    # def test_update_saida(self, client):
+    #     token = self.gerar_token()
+    #
+    #     item = Item.objects.create(
+    #         is_bem_de_consumo=True,
+    #         grupo="limpeza",
+    #         cod="UM",
+    #         descricao="TESTE",
+    #     )
+    #     item.save()
+    #
+    #     response = client.post(
+    #         path=f'{SITE_DOMINIO}/api/entradas/entrada/',
+    #         content_type="application/json",
+    #         HTTP_AUTHORIZATION=f'Token {token}',
+    #         data={
+    #             "quantidade": 10,
+    #             "is_doacao": True,
+    #             "entrada_pai": item.uuid
+    #         }
+    #     )
