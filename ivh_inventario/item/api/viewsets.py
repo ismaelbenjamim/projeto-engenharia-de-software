@@ -5,8 +5,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ivh_inventario.core.utils.relatorio_xls import gerar_planilha
+from ivh_inventario.entrada.api.serializers import CRUDEntradaSerializer
+from ivh_inventario.entrada.models import Entrada
 from ivh_inventario.item.api.serializers import ItemSerializer
 from ivh_inventario.item.models import Item
+from ivh_inventario.saida.api.serializers import CRUDSaidaSerializer
+from ivh_inventario.saida.models import Saida
 
 
 class CRUDItemViewSet(viewsets.ModelViewSet):
@@ -73,3 +77,41 @@ class ItemXLSViewSet(viewsets.ModelViewSet):
         gerar_planilha(model=self.get_queryset(), tipo="estoque_atual", usuario=usuario)
 
         return Response({'msg': 'e-mail com planilha enviado com sucesso'})
+
+
+class ItemEntradaSaidaViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all()
+    http_method_names = ['get']
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+
+    def get_queryset(self):
+        queryset = self.queryset
+
+        item = self.request.query_params.get('item')
+
+        if item:
+            queryset = queryset.filter(uuid=item)
+
+        else:
+            queryset = queryset.none()
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        item = self.get_queryset()
+        if item:
+            entradas = Entrada.objects.filter(item=item.get())
+            saidas = Saida.objects.filter(item=item.get())
+            print(entradas)
+
+            entrada = CRUDEntradaSerializer(instance=entradas, many=True)
+            saida = CRUDSaidaSerializer(instance=saidas, many=True)
+            response = {
+                "entradas": entrada.data,
+                "saidas": saida.data
+            }
+
+            return Response(response)
+        else:
+            return Response({"msg": "Item não existe"})
