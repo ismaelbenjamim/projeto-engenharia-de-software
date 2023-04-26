@@ -211,13 +211,13 @@ export const TransactionsTable = () => {
     setShowDefault(true);
   }
 
-  const getPagItem = (item) => {
-    hist.push('/estoque-atual/edit?item=' + item.uuid) 
+  const getPagItem = (uuid) => {
+    hist.push('/estoque-atual/edit?item=' + uuid) 
   }
 
   const [estoque, setEstoque_atual] = useState([]);
   useEffect(() => {
-    api.get('estoques/estoque/').then((res) => {
+    api.get('itens/item/').then((res) => {
       const data = res.data;
       const slice = data.slice(offset * resultsPerPage - resultsPerPage, offset * resultsPerPage);
       setResultsTotal(data.length);
@@ -233,23 +233,23 @@ export const TransactionsTable = () => {
     }
   }
   const TableRow = (props) => {
-    const { uuid, item, estoque_atual } = props;
+    const { uuid, cod, descricao, grupo, estoque_atual, is_bem_de_consumo } = props;
 
     return (
       <tr>
         <td>
           <Card.Link as={Link} to={Routes.Invoice.path} className="fw-normal">
-            {item.cod}
+            {cod}
           </Card.Link>
         </td>
         <td>
           <span className="fw-normal">
-            {item.descricao}
+            {descricao}
           </span>
         </td>
         <td>
           <span className="fw-normal">
-            {item.grupo}
+            {grupo}
           </span>
         </td>
         <td>
@@ -259,12 +259,12 @@ export const TransactionsTable = () => {
         </td>
         <td>
           <span className="fw-normal">
-            {getBemConsumo(item.is_bem_de_consumo)}
+            {getBemConsumo(is_bem_de_consumo)}
           </span>
         </td>
         <td>
-          <Button variant="link" className="text-dark me-2 p-0" onClick={() => getModal(item)}><FontAwesomeIcon icon={faEye} className="" /></Button>
-          <Button variant="link" className="text-dark me-2 p-0" onClick={() => getPagItem(item)}><FontAwesomeIcon icon={faEdit} className="" /></Button>
+          <Button variant="link" className="text-dark me-2 p-0" onClick={() => getModal(uuid)}><FontAwesomeIcon icon={faEye} className="" /></Button>
+          <Button variant="link" className="text-dark me-2 p-0" onClick={() => getPagItem(uuid)}><FontAwesomeIcon icon={faEdit} className="" /></Button>
           <Button variant="link" className="text-danger me-2 p-0"><FontAwesomeIcon icon={faTrashAlt} className="" /></Button>
         </td>
       </tr>

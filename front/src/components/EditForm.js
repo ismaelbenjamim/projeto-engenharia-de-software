@@ -14,7 +14,7 @@ export const EditForm = () => {
   const [descricao, setDescricao] = useState("");
   const [grupo, setGrupo] = useState("");
   const [is_bem_de_consumo, setIsBemConsumo] = useState("");
-  const [errors, setError] = useState([]);
+  const [errors, setError] = useState({});
   const [success, setSuccess] = useState("");
 
   const history = useHistory();
@@ -28,8 +28,7 @@ export const EditForm = () => {
     }).then(function (response) {
       setSuccess('Item alterado com sucesso!')
     }).catch(function(errors) {
-      console.log(errors.data)
-      setError(errors.data);
+      setError(errors.response.data);
     })
   }
   const queryParameters = new URLSearchParams(window.location.search)
@@ -43,8 +42,7 @@ export const EditForm = () => {
         setIsBemConsumo(data.is_bem_de_consumo);
         setGrupo(data.grupo);
     }).catch(function(errors) {
-      console.log(errors.data)
-      setError(errors.data);
+      setError(errors.response.data);
     })
   },[])
   return (
@@ -73,11 +71,13 @@ export const EditForm = () => {
                 <Form.Control defaultValue={grupo} required type="text" placeholder="Grupo" onChange={(e) => setGrupo(e.target.value)} />
               </Form.Group>
             </Col>
-            <Col md={6} className="mt-5">               
+            <Col md={6} className="mt-5">
               <Form.Check checked={is_bem_de_consumo} label="É bem de consumo?" id="is_bem_de_consumo" htmlFor="is_bem_de_consumo" onChange={(e) => setIsBemConsumo(!is_bem_de_consumo)} />             
             </Col>
           </Row>
-          <p className="mb-3">{errors}</p>
+          <Row>
+            <p className="mb-3">{Object.entries(errors).map(([key, value]) => (<li key={key}>{value}</li>))}</p>
+          </Row>
           <p className="mb-3">{success}</p>
           <div className="mt-3">
             <Button variant="primary" type="submit">Salvar</Button>

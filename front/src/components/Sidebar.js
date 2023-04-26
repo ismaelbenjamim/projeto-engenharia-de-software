@@ -4,7 +4,7 @@ import SimpleBar from 'simplebar-react';
 import { useLocation } from "react-router-dom";
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faBoxOpen, faChartPie, faCog, faFileAlt, faHandHoldingUsd, faSignOutAlt, faTable, faTimes, faCalendarAlt, faMapPin, faInbox, faRocket } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faBoxOpen, faChartPie, faCog, faFileAlt, faHandHoldingUsd, faSignOutAlt, faTable, faTimes, faCalendarAlt, faMapPin, faInbox, faRocket, faUsers, faSign, faSignInAlt, faBoxes, faBox } from "@fortawesome/free-solid-svg-icons";
 import { Nav, Badge, Image, Button, Dropdown, Accordion, Navbar } from '@themesberg/react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -86,9 +86,9 @@ export default (props = {}) => {
                   <Image src={ProfilePicture} className="card-img-top rounded-circle border-white" />
                 </div>
                 <div className="d-block">
-                  <h6>Hi, Jane</h6>
+                  <h6>Olá,</h6>
                   <Button as={Link} variant="secondary" size="xs" to={Routes.Signin.path} className="text-dark">
-                    <FontAwesomeIcon icon={faSignOutAlt} className="me-2" /> Sign Out
+                    <FontAwesomeIcon icon={faSignOutAlt} className="me-2" /> Sair
                   </Button>
                 </div>
               </div>
@@ -102,9 +102,22 @@ export default (props = {}) => {
               <Dropdown.Divider className="my-3 border-indigo" />
 
               <NavItem title="Dashboard" link={Routes.DashboardOverview.path} icon={faChartPie} />
-              <NavItem title="Estoque Atual" icon={faHandHoldingUsd} link={Routes.ListEstoqueAtual.path} />
-              <NavItem title="Entrada" icon={faCog} link={Routes.CreateEstoqueAtual.path} />
-              <NavItem title="Saida" icon={faCog} link={Routes.CreateSaida.path} />
+              <NavItem title="Estoque Atual" icon={faBox} link={Routes.ListEstoqueAtual.path} />
+
+              <CollapsableNavItem eventKey="entradas/" title="Entradas" icon={faSignInAlt}>
+                <NavItem title="Listar" link={Routes.ListEntrada.path} />
+                <NavItem title="Adicionar" link={Routes.CreateEntrada.path} />
+              </CollapsableNavItem>
+
+              <CollapsableNavItem eventKey="saidas/" title="Saidas" icon={faSignOutAlt}>
+                <NavItem title="Listar" link={Routes.ListSaida.path} />
+                <NavItem title="Adicionar" link={Routes.CreateSaida.path} />
+              </CollapsableNavItem>
+
+              <CollapsableNavItem eventKey="usuarios/" title="Usuários" icon={faUsers}>
+                <NavItem title="Listar" link={Routes.ListUsuario.path} />
+                <NavItem title="Adicionar" link={Routes.CreateUsuario.path} />
+              </CollapsableNavItem>
 
               <Dropdown.Divider className="my-3 border-indigo" />
 

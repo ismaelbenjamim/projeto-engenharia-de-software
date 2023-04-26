@@ -29,7 +29,7 @@ export const EditEntrada = () => {
       setSuccess('Item alterado com sucesso!')
     }).catch(function(errors) {
       console.log(errors.data)
-      setError(errors.data);
+      setError(errors.response.data);
     })
   }
   const queryParameters = new URLSearchParams(window.location.search)
@@ -44,7 +44,7 @@ export const EditEntrada = () => {
         setGrupo(data.grupo);
     }).catch(function(errors) {
       console.log(errors.data)
-      setError(errors.data);
+      setError(errors.response.data);
     })
   },[])
   return (

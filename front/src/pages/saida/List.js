@@ -1,9 +1,8 @@
 import React from "react";
 import { faCheck, faCog, faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Form, Button, ButtonGroup, Breadcrumb, InputGroup, Dropdown } from '@themesberg/react-bootstrap';
-import { TransactionsTable } from "../../components/Tables";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { EstoqueAtualTable } from "../../components/EstoqueAtualTable";
+import { SaidaTable } from "../../components/SaidaTable";
 
 export default () => {
   return (
@@ -20,7 +19,7 @@ export default () => {
         </div>
       </div>
 
-      <EstoqueAtualTable />
+      <SaidaTable />
     </>
   );
 };
