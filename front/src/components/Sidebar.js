@@ -71,7 +71,7 @@ export default (props = {}) => {
   return (
     <>
       <Navbar expand={false} collapseOnSelect variant="dark" className="navbar-theme-primary px-4 d-md-none">
-        <Navbar.Brand className="me-lg-5" as={Link} to={Routes.DashboardOverview.path}>
+        <Navbar.Brand className="me-lg-5" as={Link} to={Routes.ListEstoqueAtual.path}>
           <Image src={ReactHero} className="navbar-brand-light" />
         </Navbar.Brand>
         <Navbar.Toggle as={Button} aria-controls="main-navbar" onClick={onCollapse}>
@@ -101,8 +101,7 @@ export default (props = {}) => {
               <NavItem title="IVH Inventário" link="#" image={ReactHero} />
 
               <Dropdown.Divider className="my-3 border-indigo" />
-
-              <NavItem title="Dashboard" link={Routes.DashboardOverview.path} icon={faChartPie} />
+              
               <NavItem title="Estoque Atual" icon={faBox} link={Routes.ListEstoqueAtual.path} />
 
               <CollapsableNavItem eventKey="entrada/" title="Entradas" icon={faSignInAlt}>
